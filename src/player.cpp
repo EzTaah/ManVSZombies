@@ -1,7 +1,7 @@
 #include "../include/player.hpp"
 #include "../include/bullet.hpp"
 #include "../include/library.hpp"
-#include <raylib.h>
+#include "../include/raylib.h"
 #include <cassert>
 #include <cmath>
 #include <iostream>
