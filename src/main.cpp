@@ -1,5 +1,5 @@
-#include "../include/raylib.h"
-#include "../include/game.hpp"
+#include "raylib.h"
+#include "game.hpp"
 
 int main()
 {

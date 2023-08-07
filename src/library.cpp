@@ -1,9 +1,9 @@
-#include "../include/library.hpp"
 #include <cmath>
-#include <cstdlib>
-#include "../include/raylib.h"
 #include <iostream>
 #include <random>
+#include "raylib.h"
+#include "library.hpp"
+
 
 
 bool EventTriggered(double interval, double& lastUpdateTime)

@@ -1,7 +1,7 @@
 #pragma once 
 #include "entity.hpp"
 #include "library.hpp"
-#include "../include/raylib.h"
+#include "raylib.h"
 #include <random>
 
 class Enemy : public Entity

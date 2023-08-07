@@ -1,6 +1,6 @@
-#include "../include/enemies.hpp"
+#include "enemies.hpp"
 #include <iostream>
-#include "../include/raylib.h"
+#include "raylib.h"
 
 
 Enemies::Enemies() {}

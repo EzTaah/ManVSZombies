@@ -1,5 +1,5 @@
-#include "../include/game.hpp"
-#include "../include/raylib.h"
+#include "game.hpp"
+#include "raylib.h"
 #include <iostream>
 
 /// @brief ////////

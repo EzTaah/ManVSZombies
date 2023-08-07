@@ -1,7 +1,7 @@
-#include "../include/library.hpp"
-#include "../include/enemy.hpp"
-#include "../include/player.hpp"
-#include "../include/raylib.h"
+#include "library.hpp"
+#include "enemy.hpp"
+#include "player.hpp"
+#include "raylib.h"
 #include <cassert>
 
 

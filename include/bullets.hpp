@@ -2,7 +2,7 @@
 #include "entity.hpp"
 #include "library.hpp"
 #include "bullet.hpp"
-#include "../include/raylib.h"
+#include "raylib.h"
 #include <vector>
 
 
