@@ -2,9 +2,6 @@
     "files.exclude": {
 		"**/.git": true,
 		"**/.gitattributes": true,
-        "Makefile" : true
+        "**/.gitignore": true,
 	},
-    "files.associations": {
-        "cassert": "cpp"
-    }
 }
