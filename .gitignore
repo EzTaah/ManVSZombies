@@ -1,7 +1,7 @@
 .vscode/
 chatGPT.txt
 
-# Ignore everything in the 'example' directory
+# Ignore everything in the 'build' directory
 build/*
 
 # But don't ignore the directory itself and the .gitignore file
