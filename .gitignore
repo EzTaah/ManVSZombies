@@ -1,2 +1,8 @@
 .vscode/
-build/
+
+# Ignore everything in the 'example' directory
+build/*
+
+# But don't ignore the directory itself and the .gitignore file
+!build/
+!build/.gitkeep
