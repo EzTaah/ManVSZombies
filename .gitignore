@@ -1,4 +1,5 @@
 .vscode/
+chatGPT.txt
 
 # Ignore everything in the 'example' directory
 build/*
