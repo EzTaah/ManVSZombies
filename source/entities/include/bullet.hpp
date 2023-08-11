@@ -1,7 +1,7 @@
 #pragma once
-#include "raylib.h"
 #include "entity.hpp"
 #include "library.hpp"
+#include <raylib.hpp>
 
 class Bullet : public Entity
 {

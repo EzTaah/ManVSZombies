@@ -1,7 +1,8 @@
 #include "bullets.hpp"
 #include "bullet.hpp"
+#include <raylib.hpp>
 #include <iostream>
-#include "raylib.h"
+
 
 
 /////////////////////

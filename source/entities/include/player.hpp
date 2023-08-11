@@ -2,7 +2,7 @@
 #include "entity.hpp"
 #include "bullet.hpp"
 #include "library.hpp"
-#include "raylib.h"
+#include <raylib.hpp>
 #include <vector>
 
 class Player : public Entity

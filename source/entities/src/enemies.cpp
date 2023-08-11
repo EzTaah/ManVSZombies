@@ -1,6 +1,8 @@
 #include "enemies.hpp"
+#include <raylib.hpp>
 #include <iostream>
-#include "raylib.h"
+
+
 
 
 Enemies::Enemies() {}

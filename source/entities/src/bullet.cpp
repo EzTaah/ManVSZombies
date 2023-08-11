@@ -1,6 +1,7 @@
 #include "bullet.hpp"
+#include <raylib.hpp>
 #include <iostream>
-#include "raylib.h"
+
 
 Bullet::Bullet(Vector2 _position, float _xSpeed, float _ySpeed)
 {

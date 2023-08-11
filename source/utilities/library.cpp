@@ -1,7 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <random>
-#include "raylib.h"
+#include <raylib.hpp>
 #include "library.hpp"
 
 
