@@ -7,13 +7,12 @@
 class BulletsManager
 {
 public:
-
     // Initialization and Cleanup
-    Initialize();   // To set up any initial configurations for the bullet manager.
+    BulletsManager();      // constructor
     void Clear();    // To remove all bullets and reset the manager.
 
     // Bullet Creation
-    void ShootNewBullet(Rectangle playerRectangle);
+    void ShootNewBullet(Rectangle playerRectangle_);
 
     // Update and Draw
     void Update();
@@ -33,6 +32,6 @@ public:
 
 private:
     std::vector<Bullet> bulletsArray;
-    Vector2 bulletSpeed;
-    Vector2 Bulletsize;     // 10, 5
+    float bulletSpeed;
+    Vector2 Bulletsize;
 };

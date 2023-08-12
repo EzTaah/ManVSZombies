@@ -4,50 +4,22 @@
 #include <iostream>
 
 
-
-/////////////////////
-Vector2 CalculateBulletDirection(EntityAttributes position, int bulletSpeed)
+BulletsManager::BulletsManager() 
 {
-    Vector2 mousePosition = GetMousePosition();
-
-    // Getting the angle
-    float xDistancePlayerMouse = position.x - mousePosition.x;
-    float yDistancePlayerMouse = position.y - mousePosition.y; 
-
-    float coeff;
-    if (xDistancePlayerMouse != 0) {
-        coeff = std::abs(yDistancePlayerMouse / xDistancePlayerMouse);
-    };
-
-
-    // Getting the x and y speed of the bullet
-    Vector2 bulletDirection;
-    
-    if (std::abs(xDistancePlayerMouse) > std::abs(yDistancePlayerMouse)) 
-    {
-        bulletDirection.x = (xDistancePlayerMouse / std::abs(xDistancePlayerMouse)) * bulletSpeed;
-        bulletDirection.y = (yDistancePlayerMouse / std::abs(yDistancePlayerMouse)) * coeff * abs(bulletDirection.x);
-    }
-    else
-    {
-        bulletDirection.y = (yDistancePlayerMouse / std::abs(yDistancePlayerMouse)) * bulletSpeed;
-        bulletDirection.x = (xDistancePlayerMouse / std::abs(xDistancePlayerMouse)) * 1/coeff * abs(bulletDirection.y);
-    }
-    return bulletDirection;
+    bulletSpeed = 10.0f;
+    Bulletsize = {10.0f, 10.0f};
 }
 
-///////////////////
 
-
-
-Bullets::Bullets() 
+void BulletsManager::Clear()
 {
-    bulletSpeed = 10.0;
+    // To remove all bullets and reset the manager.
 }
 
-void Bullets::ShootNewBullet(EntityAttributes playerAttributes)
+ 
+void BulletsManager::ShootNewBullet(Rectangle playerRectangle_)
 {
-    Vector2 bulletDirection = CalculateBulletDirection(playerAttributes, bulletSpeed);
+    Vector2 bulletDirection = CalculateBulletDirection(playerRectangle_, bulletSpeed);
     bulletsArray.push_back(Bullet({playerAttributes.x, playerAttributes.y}, - bulletDirection.x, - bulletDirection.y));
 }
 
@@ -87,3 +59,36 @@ void Bullets::RemoveElementBulletsArray(int index)
 {
     bulletsArray.erase(bulletsArray.begin() + index);
 }
+
+
+/// UTILITY FUNCTIONS //////////////////
+Vector2 CalculateBulletDirection(Rectangle playerPosition, int bulletSpeed)
+{
+    Vector2 mousePosition = GetMousePosition();     // get a vector containing the mouse position
+
+    float xDistancePlayerMouse = playerPosition.x - mousePosition.x;    // Calculate the x distance between the player and the mouse 
+    float yDistancePlayerMouse = playerPosition.y - mousePosition.y;    // Calculate the y distance between the player and the mouse
+
+    float coeff;
+    if (xDistancePlayerMouse != 0) {
+        coeff = std::abs(yDistancePlayerMouse / xDistancePlayerMouse);
+    };
+
+
+    // Getting the x and y speed of the bullet
+    Vector2 bulletDirection;
+    
+    if (std::abs(xDistancePlayerMouse) > std::abs(yDistancePlayerMouse)) 
+    {
+        bulletDirection.x = (xDistancePlayerMouse / std::abs(xDistancePlayerMouse)) * bulletSpeed;
+        bulletDirection.y = (yDistancePlayerMouse / std::abs(yDistancePlayerMouse)) * coeff * abs(bulletDirection.x);
+    }
+    else
+    {
+        bulletDirection.y = (yDistancePlayerMouse / std::abs(yDistancePlayerMouse)) * bulletSpeed;
+        bulletDirection.x = (xDistancePlayerMouse / std::abs(xDistancePlayerMouse)) * 1/coeff * abs(bulletDirection.y);
+    }
+    return bulletDirection;
+}
+
+///////////////////

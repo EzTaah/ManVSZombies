@@ -24,6 +24,7 @@ void Enemy::Update(EntityAttributes playerAttributes)
     position.y += descision.y;
 }
 
+
 void Enemy::Draw() const
 {
     DrawRectangle(position.x, position.y, width, height, bg);
