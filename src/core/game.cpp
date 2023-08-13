@@ -8,47 +8,11 @@ double lastUpdateTime2 {0.0};
 /////////////////////
 
 
-
+// By directly initializing members, you avoid default construction followed by assignment, which can be less efficient.
 Game::Game() 
-    : player(), 
-      enemies(), // By directly initializing members, you avoid default construction followed by assignment, which can be less efficient.
-      bullets()
-{}
-
-
-void Game::HandleInputs()
+    : inputManager(), player(), bulletManager(), collisionManager()
 {
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {    
-        Shoot();
-    }
-    if (IsKeyDown(KEY_W)) {
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetyPosition(player.GetAttributes().y - deplacementValue);
-        if (player.isColliding()) {
-            player.SetyPosition(player.GetAttributes().y + deplacementValue); 
-        }
-    }
-    if (IsKeyDown(KEY_D)) {
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetxPosition(player.GetAttributes().x + deplacementValue);
-        if (player.isColliding()) {
-            player.SetxPosition(player.GetAttributes().x - deplacementValue);
-        }
-    }
-    if (IsKeyDown(KEY_S)) {
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetyPosition(player.GetAttributes().y + deplacementValue);
-        if (player.isColliding()) {
-            player.SetyPosition(player.GetAttributes().y - deplacementValue);
-        }
-    }
-    if (IsKeyDown(KEY_A)) {
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetxPosition(player.GetAttributes().x - deplacementValue);
-        if (player.isColliding()) {
-            player.SetxPosition(player.GetAttributes().x + deplacementValue);
-        }
-    };
+    zombieManager = ZombieManager(player.GetRectangle());
 }
 
 
@@ -81,6 +45,60 @@ void Game::Shoot()
         bullets.ShootNewBullet(player.GetAttributes());
     } 
 }
+
+
+
+void Game::HandleInputs()
+{
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
+    {    
+        bulletManager.ShootNewBullet(player.GetRectangle());
+    }
+    if (IsKeyDown(KEY_W)) 
+    {
+        float frameTime{GetFrameTime()};
+
+        player.moveUp(frameTime);
+
+
+        float deplacementValue = player.GetSpeed() * GetFrameTime();
+        player.SetyPosition(player.GetAttributes().y - deplacementValue);
+        if (player.isColliding()) {
+            player.SetyPosition(player.GetAttributes().y + deplacementValue); 
+        }
+    }
+    if (IsKeyDown(KEY_D)) 
+    {
+        float deplacementValue = player.GetSpeed() * GetFrameTime();
+        player.SetxPosition(player.GetAttributes().x + deplacementValue);
+        if (player.isColliding()) {
+            player.SetxPosition(player.GetAttributes().x - deplacementValue);
+        }
+    }
+    if (IsKeyDown(KEY_S)) 
+    {
+        float deplacementValue = player.GetSpeed() * GetFrameTime();
+        player.SetyPosition(player.GetAttributes().y + deplacementValue);
+        if (player.isColliding()) {
+            player.SetyPosition(player.GetAttributes().y - deplacementValue);
+        }
+    }
+    if (IsKeyDown(KEY_A)) 
+    {
+        float deplacementValue = player.GetSpeed() * GetFrameTime();
+        player.SetxPosition(player.GetAttributes().x - deplacementValue);
+        if (player.isColliding()) {
+            player.SetxPosition(player.GetAttributes().x + deplacementValue);
+        }
+    };
+}
+
+
+
+
+
+
+
 
 
 

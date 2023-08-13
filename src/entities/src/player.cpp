@@ -1,21 +1,14 @@
 #include "player.hpp"
-#include "bullet.hpp"
-#include "library.hpp"
-#include <raylib.hpp> 
-#include <cassert>
-#include <cmath>
-#include <iostream>
 
 
-Player::Player() : Entity()
-{
-    position = {GetScreenWidth() - 70.0f, GetScreenHeight() / 2.0f};
-    width = 30.0;
-    height = 30.0;
-    speed = 600;
-    bg = GREEN;
-    // - bulletsId = 0;
-}
+Player::Player() 
+    : Entity(), 
+      position({GetScreenWidth() - 70.0f, GetScreenHeight() / 2.0f}), 
+      speed(600.0f), 
+      size({30.0f, 30.0f}),
+      bg(GREEN)
+{}
+
 
 void Player::Update()
 {

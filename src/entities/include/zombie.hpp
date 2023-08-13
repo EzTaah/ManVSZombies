@@ -1,13 +1,13 @@
-#pragma once
+#pragma once 
 #include "entity.hpp"
 #include <raylib.hpp>
 
 
-class Bullet : public Entity
+class Zombie : public Entity
 {
 public:
-    Bullet(Vector2 position_, Vector2 speed_, Vector2 size_);
-    void Update() override;
+    Zombie(Vector2 position_, Vector2 speed_, Vector2 size_);
+    void Update(Rectangle playerRectangle_);
     void Draw() const override;
 
     Rectangle GetRectangle();
@@ -23,7 +23,9 @@ private:
 
 
 /*
-bool IsOutside();
 
-bool IsCollidingWithEnemy(EntityAttributes enemyAttributes_);
+bool isOutside();
+
+EntityAttributes GetAttributes();
+
 */

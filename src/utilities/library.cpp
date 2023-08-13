@@ -18,18 +18,6 @@ bool EventTriggered(double interval, double& lastUpdateTime)
 }
 
 
-float myUtils::random(int begin, int end)
-{
-    // Providing a seed value (using time() so each time it's different)
-	srand((unsigned) time(NULL));
-	// Get a random number
-	int randomNumber = rand();
-
-    return begin + randomNumber % (end-begin+1);
-}
-
-
-
 int myUtils::GetRandomNumber(int min, int max)
 {
     // static is used to instantiate the random engine and distribution once only.
