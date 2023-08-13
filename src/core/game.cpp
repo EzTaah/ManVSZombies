@@ -20,15 +20,19 @@ void Game::Update()
 {
     HandleInputs();
 
+    bulletManager.Update();
+
+
+
+
     CheckCollisionBallEnemy();
 
-    player.Update();
-    bullets.Update();
+
+
 
     enemies.Update(player.GetAttributes());
-    if (EventTriggered(1, lastUpdateTime1)) {
+    if (EventTriggered(1, lastUpdateTime1)) 
         enemies.SpawnNewEnemy();
-    }
 }
 
 void Game::Draw()
@@ -41,56 +45,48 @@ void Game::Draw()
 void Game::Shoot()
 {
     if (EventTriggered(0.3, lastUpdateTime2))
-    {
         bullets.ShootNewBullet(player.GetAttributes());
-    } 
 }
 
 
 
 void Game::HandleInputs()
 {
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
-    {    
+    // Mouse management
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))     
         bulletManager.ShootNewBullet(player.GetRectangle());
-    }
-    if (IsKeyDown(KEY_W)) 
-    {
-        float frameTime{GetFrameTime()};
 
-        player.moveUp(frameTime);
+    // Keys management
+    Vector2 potentialMovement{0.0f, 0.0f};
+    float frameTime = GetFrameTime();
 
+    if(IsKeyDown(KEY_W)) 
+        potentialMovement.y -= player.GetSpeed() * frameTime;
+    if(IsKeyDown(KEY_S))
+        potentialMovement.y += player.GetSpeed() * frameTime; 
+    if(IsKeyDown(KEY_A))
+        potentialMovement.x -= player.GetSpeed() * frameTime; 
+    if(IsKeyDown(KEY_D))
+        potentialMovement.x += player.GetSpeed() * frameTime; 
 
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetyPosition(player.GetAttributes().y - deplacementValue);
-        if (player.isColliding()) {
-            player.SetyPosition(player.GetAttributes().y + deplacementValue); 
-        }
-    }
-    if (IsKeyDown(KEY_D)) 
+    // Check for boundary
+    if(collisionManager.IsOutsideScreenX(player, potentialMovement.x)) 
+        potentialMovement.x = 0.0f;
+    if(collisionManager.IsOutsideScreenY(player, potentialMovement.y)) 
+        potentialMovement.y = 0.0f;
+
+    // Check for wall
+    // -> manage wall collision
+
+    // Check for zombie collision
+    if(zombieManager.ZombiesAreCollidingWithPlayer(player, potentialMovement.x))
     {
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetxPosition(player.GetAttributes().x + deplacementValue);
-        if (player.isColliding()) {
-            player.SetxPosition(player.GetAttributes().x - deplacementValue);
-        }
+        collisionManager.ManageZombieCollision();
+        potentialMovement = {0.0f, 0.0f};
     }
-    if (IsKeyDown(KEY_S)) 
-    {
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetyPosition(player.GetAttributes().y + deplacementValue);
-        if (player.isColliding()) {
-            player.SetyPosition(player.GetAttributes().y - deplacementValue);
-        }
-    }
-    if (IsKeyDown(KEY_A)) 
-    {
-        float deplacementValue = player.GetSpeed() * GetFrameTime();
-        player.SetxPosition(player.GetAttributes().x - deplacementValue);
-        if (player.isColliding()) {
-            player.SetxPosition(player.GetAttributes().x + deplacementValue);
-        }
-    };
+
+    // Move the player
+    player.MoveBy(potentialMovement);
 }
 
 

@@ -7,13 +7,15 @@ class Player : public Entity
 {
 public:
     Player();
-    void Update() override;
-    void Draw() const override;
 
+    // Update
+    void SetPosition(Vector2 position_);
+    void MoveBy(Vector2 movement_);
+
+    // Informations
     Rectangle GetRectangle();
-    void SetxPosition(float _xPosition);
-    void SetyPosition(float _yPosition);
-    int GetSpeed();
+    float GetSpeed();
+
 
 private:
     Vector2 position;
@@ -26,5 +28,6 @@ private:
 /*
 bool isColliding();
 
+void Draw() const override;
 
 */

@@ -10,9 +10,39 @@ Player::Player()
 {}
 
 
-void Player::Update()
+void Player::SetPosition(Vector2 position_) 
 {
-    // do nothing
+    position = position_;
+}
+
+
+void Player::MoveBy(Vector2 movement_)
+{
+    position.x += movement_.x;
+    position.y += movement_.y;
+}
+
+
+Rectangle Player::GetRectangle()
+{
+    return {position.x, position.y, size.x, size.y};
+}
+
+
+float Player::GetSpeed() 
+{
+    return speed;
+}
+
+
+
+
+
+
+/*
+bool Player::isColliding()
+{
+    return (position.x < 0) || (position.x > GetScreenWidth() - width) || (position.y < 0) || (position.y > GetScreenHeight() - height);   
 }
 
 
@@ -20,24 +50,4 @@ void Player::Draw() const
 {
     DrawRectangle(position.x, position.y, width, height, bg);
 }
-
-
-bool Player::isColliding()
-{
-    return (position.x < 0) || (position.x > GetScreenWidth() - width) || (position.y < 0) || (position.y > GetScreenHeight() - height);   
-}
-
-
-EntityAttributes Player::GetAttributes() {
-    return {position.x, position.y, width, height};
-}
-
-Rectangle Player::GetRectangle()
-{
-    return {position.x, position.y, width, height};
-}
-
-
-void Player::SetxPosition(float _xPosition) { position.x = _xPosition; }
-void Player::SetyPosition(float _yPosition) { position.y = _yPosition; }
-int Player::GetSpeed() { return speed; }
+*/

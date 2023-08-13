@@ -18,9 +18,7 @@ public:
 
 private:
     void HandleInputs();
-
     void Shoot();
-
 
     InputManager inputManager;
     Player player;
