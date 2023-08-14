@@ -9,8 +9,8 @@
 ZombieManager::ZombieManager() {}
 
 
-ZombieManager::ZombieManager(Rectangle playerRectangle_)
-    : zombieSpeed({10.0f, 10.0f}), zombieSize({10.0f, 10.0f}), playerRectangle(playerRectangle_)
+ZombieManager::ZombieManager(const Rectangle& playerRectangle_)
+    : zombieSpeed({10.0f, 10.0f}), zombieSize({10.0f, 10.0f}), playerRectangle(playerRectangle_), lastUpdateTimeEvent1(0.0f)
 {}
 
 
@@ -53,17 +53,19 @@ void ZombieManager::SpawnNewZombie()
 
 void ZombieManager::Update()
 {
-    // Update zombies
+    // Spawn new zombies
+    if (EventTriggered(1, lastUpdateTimeEvent1)) 
+        SpawnNewZombie();
+
+    // Update Zombies
     for (Zombie& elt : zombiesArray)
-    {
         elt.Update(playerRectangle);
-    }
 }
 
 
-void ZombieManager::RemoveZombie(int index_)
+void ZombieManager::KillZombie(int index_)
 {
-    zombiesArray.erase(zombiesArray.begin() + index_);
+    RemoveZombie(index_);
 }
 
 
@@ -77,3 +79,21 @@ std::vector<Zombie> ZombieManager::GetZombiesArray()
 {
     return zombiesArray;
 }
+
+
+
+void ZombieManager::RemoveZombie(int index_)
+{
+    zombiesArray.erase(zombiesArray.begin() + index_);
+}
+
+
+
+
+
+// std::vector<Rectangle> ZombieManager::GetZombiesRectangles()
+// {
+//     std::vector<Rectangle> rectangleArray;
+//     for(Zombie elt : zombiesArray)
+//         rectangleArray.push_back(elt.GetRectangle());
+// }

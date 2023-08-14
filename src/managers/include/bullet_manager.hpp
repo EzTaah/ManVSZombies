@@ -12,14 +12,13 @@ public:
     void Clear();    // To remove all bullets and reset the manager.
 
     // Bullet Creation
-    void ShootNewBullet(Rectangle playerRectangle_);
+    void ShootNewBullet(const Rectangle& playerRectangle_);
 
     // Update
     void Update();
 
     // Bullet Management
     void RemoveBullet(int index_);
-    void RemoveBulletsOutsideScreen();
 
     // Information
     int GetActiveBulletsCount();

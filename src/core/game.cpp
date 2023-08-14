@@ -2,54 +2,34 @@
 #include <raylib.hpp>
 #include <iostream>
 
-/// @brief ////////
-double lastUpdateTime1 {0.0};
-double lastUpdateTime2 {0.0};
-/////////////////////
 
-
-// By directly initializing members, you avoid default construction followed by assignment, which can be less efficient.
+/// PUBLIC /////////////////
 Game::Game() 
-    : inputManager(), player(), bulletManager(), collisionManager()
+    : inputManager(), player(), bulletManager(), collisionManager(), isGameOver(false)
 {
     zombieManager = ZombieManager(player.GetRectangle());
 }
 
 
-void Game::Update()
-{
+void Game::Update() {
     HandleInputs();
-
-    bulletManager.Update();
-
-
-
-
-    CheckCollisionBallEnemy();
-
-
-
-
-    enemies.Update(player.GetAttributes());
-    if (EventTriggered(1, lastUpdateTime1)) 
-        enemies.SpawnNewEnemy();
+    UpdateEntities();
+    HandleCollisions();
 }
 
-void Game::Draw()
+
+void Game::RenderScene()
 {
+    BeginDrawing();
+    ClearBackground(BROWN);
+    
     player.Draw();
-    enemies.Draw();
-    bullets.Draw();
-}
 
-void Game::Shoot()
-{
-    if (EventTriggered(0.3, lastUpdateTime2))
-        bullets.ShootNewBullet(player.GetAttributes());
+    EndDrawing();
 }
 
 
-
+/// PRIVATE  /////////////////
 void Game::HandleInputs()
 {
     // Mouse management
@@ -57,82 +37,80 @@ void Game::HandleInputs()
         bulletManager.ShootNewBullet(player.GetRectangle());
 
     // Keys management
-    Vector2 potentialMovement{0.0f, 0.0f};
+    Vector2 playerPotentialMovement{0.0f, 0.0f};
     float frameTime = GetFrameTime();
 
     if(IsKeyDown(KEY_W)) 
-        potentialMovement.y -= player.GetSpeed() * frameTime;
+        playerPotentialMovement.y -= player.GetSpeed() * frameTime;
     if(IsKeyDown(KEY_S))
-        potentialMovement.y += player.GetSpeed() * frameTime; 
+        playerPotentialMovement.y += player.GetSpeed() * frameTime; 
     if(IsKeyDown(KEY_A))
-        potentialMovement.x -= player.GetSpeed() * frameTime; 
+        playerPotentialMovement.x -= player.GetSpeed() * frameTime; 
     if(IsKeyDown(KEY_D))
-        potentialMovement.x += player.GetSpeed() * frameTime; 
+        playerPotentialMovement.x += player.GetSpeed() * frameTime; 
 
-    // Check for boundary
-    if(collisionManager.IsOutsideScreenX(player, potentialMovement.x)) 
-        potentialMovement.x = 0.0f;
-    if(collisionManager.IsOutsideScreenY(player, potentialMovement.y)) 
-        potentialMovement.y = 0.0f;
-
-    // Check for wall
-    // -> manage wall collision
-
-    // Check for zombie collision
-    if(zombieManager.ZombiesAreCollidingWithPlayer(player, potentialMovement.x))
-    {
-        collisionManager.ManageZombieCollision();
-        potentialMovement = {0.0f, 0.0f};
-    }
-
-    // Move the player
-    player.MoveBy(potentialMovement);
+    player.SetPotentialMovement(playerPotentialMovement);
 }
 
 
-
-
-
-
-
-
-
-
-void Game::CheckCollisionBallEnemy()
+void Game::UpdateEntities()
 {
-    bool leave{false};
-    for (signed int e{static_cast<signed int>(enemies.GetEnemiesArray().size()-1)} ; e >= 0 ; e--)
+    player.MoveBy(player.GetPotentialMovement());
+    zombieManager.Update();
+    bulletManager.Update();
+}
+
+
+void Game::HandleCollisions()
+{
+    // Check for player boundary collision
+    if(collisionManager.IsOutsideScreenX(player.GetRectangle())) 
+       player.ResetPositionX();
+    if(collisionManager.IsOutsideScreenY(player.GetRectangle())) 
+        player.ResetPositionY();
+
+    
+    // Check for bullets boundary collision
+    for(unsigned int i{0} ; i < bulletManager.GetBulletsArray().size() ; ++i)
     {
-        for (signed int b{static_cast<signed int>(bullets.GetBulletsArray().size()-1)} ; b >= 0 ; b--)
+        if(collisionManager.IsOutsideScreen(bulletManager.GetBulletsArray()[i].GetRectangle())) 
+            bulletManager.RemoveBullet(i);
+    }
+
+    // Check for player-zombie collision
+    for(unsigned int i{0} ; i < zombieManager.GetZombiesArray().size() ; ++i)
+    {
+        if(collisionManager.AreColliding(player.GetRectangle(), zombieManager.GetZombiesArray()[i].GetRectangle()))
         {
-            std::cout << 'e' << e << std::endl;
-            std::cout << 'b' << e << std::endl;
-            if (CheckCollisionRecs(bullets.GetBulletsArray()[b].GetRectangle(), enemies.GetEnemiesArray()[e].GetRectangle()))
+            // Reset player movement
+            player.ResetPositionX();
+            player.ResetPositionY();
+
+            // Reset zombie movement
+            // ->
+        }
+    }
+
+    // Check for ball-zombie collision
+    std::vector<int> bulletsToRemove;
+    std::vector<int> zombiesToRemove;
+
+    for(unsigned int i{0} ; i < bulletManager.GetBulletsArray().size() ; ++i)
+    {
+        for(unsigned int n{0} ; n < zombieManager.GetZombiesArray().size() ; ++n)
+        {
+            if(collisionManager.AreColliding(bulletManager.GetBulletsArray()[i].GetRectangle(), zombieManager.GetZombiesArray()[n].GetRectangle()))
             {
-                leave = true;
-                bullets.RemoveElementBulletsArray(b);
-                enemies.RemoveElementEnemiesArray(e);
-                break;
+                bulletsToRemove.push_back(i);   // The bullet will be removed
+                zombiesToRemove.push_back(n);   // The zombie will be killed
             }
         }
-        if (leave) {
-            leave = false;
-            break;
-        }
     }
+    // Remove bullet
+    for(unsigned int i{0} ; i < bulletsToRemove.size() ; ++i)
+        bulletManager.RemoveBullet(i);
+
+    // Kill zombie
+    for(unsigned int n{0} ; n < bulletsToRemove.size() ; ++n)
+        zombieManager.KillZombie(n);
 }
-
-
-
-// void Game::CheckCollisionPlayerEnemy()
-// {
-//     for (signed int e{static_cast<signed int>(enemies.GetEnemiesArray().size()-1)} ; e >= 0 ; e--)
-//     {
-//         if (CheckCollisionRecs(player.GetRectangle(), enemies.GetEnemiesArray()[e].GetRectangle()))
-//         {
-//             bullets.RemoveElementBulletsArray(b);
-//             enemies.RemoveElementEnemiesArray(e);
-//             break;
-//         }
-//     }
-// }

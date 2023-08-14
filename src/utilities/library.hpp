@@ -1,7 +1,7 @@
 #pragma once
 
 
-bool EventTriggered(double interval, double& lastUpdateTime);
+bool EventTriggered(double interval_, double& lastUpdateTime_);
 
 
 namespace myUtils

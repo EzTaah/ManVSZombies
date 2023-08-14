@@ -11,14 +11,15 @@ class Game
 public:
     Game();
     void Update();
-    void Draw();
+    void RenderScene();
 
-    void CheckCollisionBallEnemy();
-    void CheckCollisionPlayerEnemy();
 
 private:
     void HandleInputs();
-    void Shoot();
+    void UpdateEntities();
+    void HandleCollisions();
+
+    bool isGameOver;
 
     InputManager inputManager;
     Player player;

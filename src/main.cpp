@@ -3,20 +3,14 @@
 
 int main()
 {
-    InitWindow(1366, 768, "lckp");
+    InitWindow(1366, 768, "ManVsZombie");
     SetWindowState(FLAG_VSYNC_HINT);
-
     Game game = Game();
 
     while (!WindowShouldClose())
     {
         game.Update();
-
-        // Drawing
-        BeginDrawing();
-        ClearBackground(BROWN);
-        game.Draw();
-        EndDrawing();
+        game.RenderScene();
     }
     CloseWindow();
     return 0;

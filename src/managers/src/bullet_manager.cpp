@@ -49,7 +49,7 @@ void BulletManager::Clear()
 }
 
  
-void BulletManager::ShootNewBullet(Rectangle playerRectangle_)
+void BulletManager::ShootNewBullet(const Rectangle& playerRectangle_)
 {
     Vector2 bulletDirection = CalculateBulletDirection(playerRectangle_, bulletSpeed);
     bulletsArray.push_back(Bullet({playerRectangle_.x, playerRectangle_.y}, {- bulletDirection.x, - bulletDirection.y}, bulletSize));
@@ -58,9 +58,6 @@ void BulletManager::ShootNewBullet(Rectangle playerRectangle_)
 
 void BulletManager::Update()
 {
-    // Manage bullets that are outside
-    RemoveBulletsOutsideScreen();
-
     // Update the bullets
     for (Bullet& elt : bulletsArray)
     {
@@ -72,30 +69,6 @@ void BulletManager::Update()
 void BulletManager::RemoveBullet(int index_)
 {
     bulletsArray.erase(bulletsArray.begin() + index_);
-}
-
-
-void BulletManager::RemoveBulletsOutsideScreen()
-{
-    std::vector<int> allTheBallIndexToRemove;
-    for (unsigned i{0} ; i < bulletsArray.size() ; ++i)    // The script runs through all active balls
-    {
-        if (
-        (bulletsArray[i].GetRectangle().x < 0) || 
-        (bulletsArray[i].GetRectangle().x > GetScreenWidth() - bulletsArray[i].GetRectangle().width) || 
-        (bulletsArray[i].GetRectangle().y < 0) || 
-        (bulletsArray[i].GetRectangle().y > GetScreenHeight() - bulletsArray[i].GetRectangle().height)
-        )   // The condition is true if the bullet is outside the screen
-        {
-            allTheBallIndexToRemove.push_back(i);   // Save the index of each ball outside the screen
-        }
-
-        // Remove all the ball with the index inside this vector
-        for (int index : allTheBallIndexToRemove)
-        {
-            RemoveBullet(index);
-        }
-    }
 }
 
 

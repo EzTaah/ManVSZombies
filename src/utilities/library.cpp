@@ -6,12 +6,12 @@
 
 
 
-bool EventTriggered(double interval, double& lastUpdateTime)
+bool EventTriggered(double interval_, double& lastUpdateTime_)
 {
     double currentTime = GetTime();
-    if (currentTime - lastUpdateTime >= interval)
+    if (currentTime - lastUpdateTime_ >= interval_)
     {
-        lastUpdateTime = currentTime;
+        lastUpdateTime_ = currentTime;
         return true;
     }
     return false;

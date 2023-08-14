@@ -8,7 +8,7 @@ class Bullet : public Entity
 public:
     Bullet(Vector2 position_, Vector2 speed_, Vector2 size_);
     void Update() override;
-    void Draw() const override;
+
 
     Rectangle GetRectangle();
 
@@ -26,4 +26,6 @@ private:
 bool IsOutside();
 
 bool IsCollidingWithEnemy(EntityAttributes enemyAttributes_);
+
+void Draw() const override;
 */
