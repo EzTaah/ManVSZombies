@@ -1,7 +1,5 @@
 
-# Compilation Instructions 
-
-## Using MinGW Compiler
+# Compilation Instructions ( using MinGW Compiler )
 
 1. Navigate to the build directory:
 ```
