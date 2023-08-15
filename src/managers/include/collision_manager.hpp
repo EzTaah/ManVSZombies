@@ -8,8 +8,8 @@ class CollisionManager
 {
 public:
     CollisionManager();
-    bool IsOutsideScreenX(const Rectangle& entityRectangle_);
-    bool IsOutsideScreenY(const Rectangle& entityRectangle_);
-    bool IsOutsideScreen(const Rectangle& entityRectangle_);
+    bool IsOutsideBoundaryX(const Rectangle& entityRectangle_);
+    bool IsOutsideBoundaryY(const Rectangle& entityRectangle_);
+    bool IsOutsideBoundary(const Rectangle& entityRectangle_);
     bool AreColliding(const Rectangle& entityRectangle1_, const Rectangle& entityRectangle2_);
 };

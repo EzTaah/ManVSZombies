@@ -6,7 +6,7 @@
 CollisionManager::CollisionManager() {}
 
 
-bool CollisionManager::IsOutsideScreenX(const Rectangle& entityRectangle_)
+bool CollisionManager::IsOutsideBoundaryX(const Rectangle& entityRectangle_)
 {
     bool left = entityRectangle_.x < 0;
     bool right = entityRectangle_.x > GetScreenWidth() - entityRectangle_.width;
@@ -15,7 +15,7 @@ bool CollisionManager::IsOutsideScreenX(const Rectangle& entityRectangle_)
 }
 
 
-bool CollisionManager::IsOutsideScreenY(const Rectangle& entityRectangle_)
+bool CollisionManager::IsOutsideBoundaryY(const Rectangle& entityRectangle_)
 {
     bool top = entityRectangle_.y < 0;
     bool bottom = entityRectangle_.y > GetScreenHeight() - entityRectangle_.height;
@@ -24,9 +24,9 @@ bool CollisionManager::IsOutsideScreenY(const Rectangle& entityRectangle_)
 }
 
 
-bool CollisionManager::IsOutsideScreen(const Rectangle& entityRectangle_)
+bool CollisionManager::IsOutsideBoundary(const Rectangle& entityRectangle_)
 {
-    return (IsOutsideScreenX(entityRectangle_) || IsOutsideScreenY(entityRectangle_));
+    return (IsOutsideBoundaryX(entityRectangle_) || IsOutsideBoundaryY(entityRectangle_));
 }
 
 

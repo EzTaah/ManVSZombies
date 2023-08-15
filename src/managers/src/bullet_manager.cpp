@@ -6,40 +6,32 @@
 
 
 /// UTILITY FUNCTIONS //////////////////
-Vector2 CalculateBulletDirection(Rectangle PlayerRectangle_, float bulletSpeed_)
+Vector2 CalculateBulletDirection(const Rectangle& playerRectangle_, float bulletSpeed_)
 {
     Vector2 mousePosition = GetMousePosition();     // get a vector containing the mouse position
 
-    float xDistancePlayerMouse = PlayerRectangle_.x - mousePosition.x;    // Calculate the x distance between the player and the mouse 
-    float yDistancePlayerMouse = PlayerRectangle_.y - mousePosition.y;    // Calculate the y distance between the player and the mouse
+    // Calculate the direction from the player to the mouse
+    Vector2 direction = { mousePosition.x - playerRectangle_.x, mousePosition.y - playerRectangle_.y };
 
-    float coeff;
-    if (xDistancePlayerMouse != 0) {
-        coeff = abs(yDistancePlayerMouse / xDistancePlayerMouse);
-    };
-
-
-    // Getting the x and y speed of the bullet
-    Vector2 bulletDirection;
-    
-    if (abs(xDistancePlayerMouse) > abs(yDistancePlayerMouse)) 
-    {
-        bulletDirection.x = (xDistancePlayerMouse / abs(xDistancePlayerMouse)) * bulletSpeed_;
-        bulletDirection.y = (yDistancePlayerMouse / abs(yDistancePlayerMouse)) * coeff * abs(bulletDirection.x);
+    // Normalize the direction
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+    if (length != 0) {  // Avoid division by zero
+        direction.x /= length;
+        direction.y /= length;
     }
-    else
-    {
-        bulletDirection.y = (yDistancePlayerMouse / abs(yDistancePlayerMouse)) * bulletSpeed_;
-        bulletDirection.x = (xDistancePlayerMouse / abs(xDistancePlayerMouse)) * 1/coeff * abs(bulletDirection.y);
-    }
-    return bulletDirection;
+
+    // Scale by bullet speed
+    direction.x *= bulletSpeed_;
+    direction.y *= bulletSpeed_;
+
+    return direction;
 }
 
 ///////////////////////////////////////
 
 
 BulletManager::BulletManager()
-    : bulletSpeed(10.0f), bulletSize({10.0f, 10.0f})
+    : bulletSpeed(1500.0f), bulletSize({7.0f, 7.0f})
 {}
 
 
@@ -49,10 +41,10 @@ void BulletManager::Clear()
 }
 
  
-void BulletManager::ShootNewBullet(const Rectangle& playerRectangle_)
+void BulletManager::ShootNewBullet(const Rectangle& playerRectangle_, const Rectangle& playerRectangleInViewSpace_)
 {
-    Vector2 bulletDirection = CalculateBulletDirection(playerRectangle_, bulletSpeed);
-    bulletsArray.push_back(Bullet({playerRectangle_.x, playerRectangle_.y}, {- bulletDirection.x, - bulletDirection.y}, bulletSize));
+    Vector2 bulletDirection = CalculateBulletDirection(playerRectangleInViewSpace_, bulletSpeed);
+    bulletsArray.push_back(Bullet({playerRectangle_.x, playerRectangle_.y}, {bulletDirection.x, bulletDirection.y}, bulletSize));
 }
 
 
@@ -78,39 +70,17 @@ int BulletManager::GetActiveBulletsCount()
 }
 
 
-std::vector<Bullet> BulletManager::GetBulletsArray()
+std::vector<Bullet>& BulletManager::GetBulletsArray()
 {
     return bulletsArray;
 }
 
 
-
-
-
-
-
-
-
-/*
-void Bullets::Draw() const
+std::vector<Rectangle> BulletManager::GetBulletsRectangle()
 {
-    for (const Bullet& elt : bulletsArray)
-    {
-        elt.Draw();
-    }
+    std::vector<Rectangle> bulletsRectangleArray;
+    for(Bullet& elt : bulletsArray)
+        bulletsRectangleArray.push_back(elt.GetRectangle());
+    
+    return bulletsRectangleArray;
 }
-
-
-
-std::vector<Bullet> Bullets::GetbulletsArray()
-{
-    return bulletsArray;
-}
-
-
-
-void Bullets::RemoveElementbulletsArray(int index)
-{
-    bulletsArray.erase(bulletsArray.begin() + index);
-}
-*/

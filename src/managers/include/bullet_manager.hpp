@@ -12,7 +12,7 @@ public:
     void Clear();    // To remove all bullets and reset the manager.
 
     // Bullet Creation
-    void ShootNewBullet(const Rectangle& playerRectangle_);
+    void ShootNewBullet(const Rectangle& playerRectangle_, const Rectangle& playerRectangleInViewSpace_);
 
     // Update
     void Update();
@@ -22,7 +22,8 @@ public:
 
     // Information
     int GetActiveBulletsCount();
-    std::vector<Bullet> GetBulletsArray();   // Retrieve the array of all bullets currently managed by the BulletManager.
+    std::vector<Bullet>& GetBulletsArray();   // Retrieve the array of all bullets currently managed by the BulletManager.
+    std::vector<Rectangle> GetBulletsRectangle();
 
 
 private:

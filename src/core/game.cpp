@@ -1,13 +1,30 @@
 #include "game.hpp"
+#include "library.hpp"
 #include <raylib.hpp>
 #include <iostream>
 
 
 /// PUBLIC /////////////////
 Game::Game() 
-    : inputManager(), player(), bulletManager(), collisionManager(), isGameOver(false)
+    : gridManager(),
+      inputManager(),
+      player(),
+      bulletManager(),
+      zombieManager(),
+      wallManager(),
+      collisionManager(),
+      isGameOver(false)
 {
-    zombieManager = ZombieManager(player.GetRectangle());
+    // Setup grid
+    gridManager.InitGrid();
+    grid = gridManager.GetGrid();
+
+    // Setup walls
+    wallManager.InitWalls(grid);
+
+    // Setup camera
+    renderer = Renderer(player.GetRectangle());
+
 }
 
 
@@ -20,12 +37,21 @@ void Game::Update() {
 
 void Game::RenderScene()
 {
-    BeginDrawing();
-    ClearBackground(BROWN);
-    
-    player.Draw();
+    // std::cout << "----------------------------------------------" << std::endl;
+    // std::cout << "X Camera position : " << renderer.camera.GetPosition().x << std::endl;
+    // std::cout << "Y Camera position : " << renderer.camera.GetPosition().y << std::endl;
 
-    EndDrawing();
+    // std::cout << "X lLayer position : " << player.GetPosition().x << std::endl;
+    // std::cout << "Y Player position : " << player.GetPosition().y << std::endl;
+
+    // std::cout << "X Player positionInViewSpace : " << player.GetPositionInViewSpace().x << std::endl;
+    // std::cout << "Y Player positionInViewSpace : " << player.GetPositionInViewSpace().y << std::endl;
+    // std::cout << "----------------------------------------------" << std::endl;
+
+
+    renderer.UpdateCamera(player.GetRectangle());
+    renderer.UpdateAllEntitiesPositionInViewSpace(gridManager, player, bulletManager.GetBulletsArray(), zombieManager.GetZombiesArray(), wallManager.GetWallsArray());
+    renderer.Draw(gridManager, player, bulletManager.GetBulletsArray(), zombieManager.GetZombiesArray(), wallManager.GetWallsArray());
 }
 
 
@@ -33,8 +59,11 @@ void Game::RenderScene()
 void Game::HandleInputs()
 {
     // Mouse management
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))     
-        bulletManager.ShootNewBullet(player.GetRectangle());
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+    {
+        if (EventTriggered(0.5, lastUpdateTimeEvent1)) 
+            bulletManager.ShootNewBullet(player.GetRectangle(), player.GetRectangleInViewSpace());
+    }
 
     // Keys management
     Vector2 playerPotentialMovement{0.0f, 0.0f};
@@ -56,7 +85,7 @@ void Game::HandleInputs()
 void Game::UpdateEntities()
 {
     player.MoveBy(player.GetPotentialMovement());
-    zombieManager.Update();
+    zombieManager.Update(player.GetRectangle());
     bulletManager.Update();
 }
 
@@ -64,16 +93,19 @@ void Game::UpdateEntities()
 void Game::HandleCollisions()
 {
     // Check for player boundary collision
-    if(collisionManager.IsOutsideScreenX(player.GetRectangle())) 
+    //if(collisionManager.IsOutsideBoundaryX(player.GetRectangle())) 
+    if(false)
        player.ResetPositionX();
-    if(collisionManager.IsOutsideScreenY(player.GetRectangle())) 
+    // if(collisionManager.IsOutsideBoundaryY(player.GetRectangle())) 
+    if(false)
         player.ResetPositionY();
 
     
     // Check for bullets boundary collision
     for(unsigned int i{0} ; i < bulletManager.GetBulletsArray().size() ; ++i)
     {
-        if(collisionManager.IsOutsideScreen(bulletManager.GetBulletsArray()[i].GetRectangle())) 
+        //if(collisionManager.IsOutsideBoundary(bulletManager.GetBulletsArray()[i].GetRectangle())) 
+        if(false)
             bulletManager.RemoveBullet(i);
     }
 
@@ -83,8 +115,8 @@ void Game::HandleCollisions()
         if(collisionManager.AreColliding(player.GetRectangle(), zombieManager.GetZombiesArray()[i].GetRectangle()))
         {
             // Reset player movement
-            player.ResetPositionX();
-            player.ResetPositionY();
+            //player.ResetPositionX();
+            //player.ResetPositionY();
 
             // Reset zombie movement
             // ->
@@ -107,10 +139,10 @@ void Game::HandleCollisions()
         }
     }
     // Remove bullet
-    for(unsigned int i{0} ; i < bulletsToRemove.size() ; ++i)
-        bulletManager.RemoveBullet(i);
+    for(signed int i{bulletsToRemove.size()-1} ; i >= 0 ; --i)
+        bulletManager.RemoveBullet(bulletsToRemove[i]);
 
     // Kill zombie
-    for(unsigned int n{0} ; n < bulletsToRemove.size() ; ++n)
-        zombieManager.KillZombie(n);
+    for(signed int n{zombiesToRemove.size()-1} ; n >= 0 ; --n)
+        zombieManager.KillZombie(zombiesToRemove[n]);
 }

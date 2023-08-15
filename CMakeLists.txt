@@ -14,6 +14,7 @@ include_directories(src/core)
 include_directories(src/entities/include)
 include_directories(src/managers/include)
 include_directories(src/utilities)
+include_directories(src/rendering/include)
 
 # Link directories (where the .a or .lib files are located)
 link_directories(lib/raylib)
@@ -32,6 +33,8 @@ set(SOURCE_FILES
     src/entities/src/entity.cpp
     src/entities/include/player.hpp
     src/entities/src/player.cpp
+    src/entities/include/wall.hpp
+    src/entities/src/wall.cpp
     src/entities/include/zombie.hpp
     src/entities/src/zombie.cpp
 
@@ -39,10 +42,19 @@ set(SOURCE_FILES
     src/managers/src/bullet_manager.cpp
     src/managers/include/collision_manager.hpp
     src/managers/src/collision_manager.cpp
+    src/managers/include/grid_manager.hpp
+    src/managers/src/grid_manager.cpp
     src/managers/include/input_manager.hpp
     src/managers/src/input_manager.cpp
+    src/managers/include/wall_manager.hpp
+    src/managers/src/wall_manager.cpp
     src/managers/include/zombie_manager.hpp
     src/managers/src/zombie_manager.cpp
+
+    src/rendering/include/renderer.hpp
+    src/rendering/src/renderer.cpp
+    src/rendering/include/game_camera.hpp
+    src/rendering/src/game_camera.cpp
 
     src/utilities/library.hpp
     src/utilities/library.cpp

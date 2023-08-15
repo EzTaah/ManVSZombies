@@ -3,7 +3,7 @@
 
 Player::Player() 
     : Entity(), 
-      position({GetScreenWidth() - 70.0f, GetScreenHeight() / 2.0f}), 
+      position({1600.0f, 70.0f}), 
       speed(600.0f), 
       size({30.0f, 30.0f}),
       bg(GREEN),
@@ -42,6 +42,18 @@ void Player::ResetPositionY()
 }
 
 
+void Player::SetPositionInViewSpace(const Vector2& position_)
+{
+    positionInViewSpace = position_;
+}
+
+
+Vector2 Player::GetPosition()
+{
+    return position;
+}
+
+
 Vector2 Player::GetPotentialMovement()
 {
     return potentialMovement;
@@ -54,25 +66,26 @@ Rectangle Player::GetRectangle()
 }
 
 
+Rectangle Player::GetRectangleInViewSpace()
+{
+    return {positionInViewSpace.x, positionInViewSpace.y, size.x, size.y};
+}
+
+
+
 float Player::GetSpeed() 
 {
     return speed;
 }
 
 
+Vector2 Player::GetPositionInViewSpace()
+{
+    return positionInViewSpace;
+}
+
 
 void Player::Draw() const
 {
-    DrawRectangle(position.x, position.y, size.x, size.y, bg);
+    DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, size.x, size.y, bg);
 }
-
-
-/*
-bool Player::isColliding()
-{
-    return (position.x < 0) || (position.x > GetScreenWidth() - width) || (position.y < 0) || (position.y > GetScreenHeight() - height);   
-}
-
-
-
-*/

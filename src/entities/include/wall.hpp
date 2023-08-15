@@ -1,13 +1,13 @@
 #pragma once 
 #include "entity.hpp"
 #include <raylib.hpp>
+#include <array>
 
 
-class Zombie : public Entity
+class Wall : public Entity
 {
 public:
-    Zombie(Vector2 position_, Vector2 speed_, Vector2 size_);
-    void Update(Rectangle playerRectangle_);
+    Wall(std::array<int, 2> gridPosition_);
     void Draw() const override;
 
     Rectangle GetRectangle();
@@ -17,8 +17,6 @@ public:
 
 private:
     Vector2 position;
-    Vector2 speed;
-    Vector2 size;
     Color bg;
     Vector2 positionInViewSpace;
 };

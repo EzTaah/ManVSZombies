@@ -8,13 +8,21 @@ Vector2 DescisionMaking(Rectangle playerRectangle_, Rectangle zombieRectangle_)
 
     if (playerRectangle_.x - zombieRectangle_.x < 0) {
         direction.x = -1;
-    } else {
+    } 
+    else if(playerRectangle_.x - zombieRectangle_.x == 0) {
+        direction.x = 0;
+    }
+    else {
         direction.x = 1;
     }
 
     if (playerRectangle_.y - zombieRectangle_.y < 0) {
         direction.y = -1;
-    } else {
+    } 
+    else if(playerRectangle_.y - zombieRectangle_.y == 0) {
+        direction.y = 0;
+    }
+    else {
         direction.y = 1;
     }
 
@@ -48,20 +56,25 @@ Rectangle Zombie::GetRectangle()
 }
 
 
-
-
-/*
-
 void Zombie::Draw() const
 {
-    DrawRectangle(position.x, position.y, width, height, bg);
+    DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, size.x, size.y, bg);
 }
 
 
-
-bool Zombie::isOutside()
+void Zombie::SetPositionInViewSpace(const Vector2& position_)
 {
-    return (position.x < 0) || (position.x > GetScreenWidth() - width) || (position.y < 0) || (position.y > GetScreenHeight() - height);   
+    positionInViewSpace = position_;
 }
 
-*/
+
+Vector2 Zombie::GetPositionInViewSpace()
+{
+    return positionInViewSpace;
+}
+
+
+Vector2 Zombie::GetPosition()
+{
+    return position;
+}

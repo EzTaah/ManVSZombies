@@ -12,14 +12,38 @@ Bullet::Bullet(Vector2 position_, Vector2 speed_, Vector2 size_)
 
 void Bullet::Update()
 {
-    position.x += speed.x;
-    position.y += speed.y;
+    position.x += speed.x * GetFrameTime();
+    position.y += speed.y * GetFrameTime();
+}
+
+
+void Bullet::SetPositionInViewSpace(const Vector2& position_)
+{
+    positionInViewSpace = position_;
+}
+
+
+void Bullet::Draw() const
+{
+    DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, size.x, size.y, bg);
 }
 
 
 Rectangle Bullet::GetRectangle()
 {
     return {position.x, position.y, size.x, size.y};
+}
+
+
+Vector2 Bullet::GetPositionInViewSpace()
+{
+    return positionInViewSpace;
+}
+
+
+Vector2 Bullet::GetPosition()
+{
+    return position;
 }
 
 
@@ -41,8 +65,5 @@ bool Bullet::IsOutside()
 
 
 
-void Bullet::Draw() const
-{
-    DrawRectangle(position.x, position.y, size.x, size.y, bg);
-}
+
 */
