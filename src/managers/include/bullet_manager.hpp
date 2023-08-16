@@ -7,9 +7,12 @@
 class BulletManager
 {
 public:
-    // Initialization and Cleanup
-    BulletManager();      // constructor
-    void Clear();    // To remove all bullets and reset the manager.
+    BulletManager();
+
+    // Update
+    void SetupPotentialMovement();
+    void UpdateX();
+    void UpdateY();
 
     // Bullet Creation
     void ShootNewBullet(const Rectangle& playerRectangle_, const Rectangle& playerRectangleInViewSpace_);

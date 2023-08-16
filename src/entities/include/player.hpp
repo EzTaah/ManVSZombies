@@ -8,13 +8,15 @@ class Player : public Entity
 public:
     Player();
 
-    // Update
+    // Move
     void SetPosition(Vector2 position_);
     void SetPotentialMovement(Vector2 movement_);
-    void MoveBy(Vector2 movement_);
+    void UpdateX();
+    void UpdateY();
+
+    // Collisions
     void ResetPositionX();
     void ResetPositionY();
-    void SetPositionInViewSpace(const Vector2& position_);
 
     // Informations
     Vector2 GetPosition();
@@ -24,8 +26,9 @@ public:
     float GetSpeed();
     Vector2 GetPositionInViewSpace();
 
-    // Draw
+    // Rendering
     void Draw() const override;
+    void SetPositionInViewSpace(const Vector2& position_);
 
 
 private:

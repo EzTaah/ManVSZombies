@@ -4,13 +4,14 @@
 Player::Player() 
     : Entity(), 
       position({1600.0f, 70.0f}), 
-      speed(600.0f), 
+      speed(300.0f), 
       size({30.0f, 30.0f}),
       bg(GREEN),
       potentialMovement({0.0f, 0.0f})
 {}
 
 
+// Move
 void Player::SetPosition(Vector2 position_) 
 {
     position = position_;
@@ -23,31 +24,32 @@ void Player::SetPotentialMovement(Vector2 movement_)
 }
 
 
-void Player::MoveBy(Vector2 movement_)
+void Player::UpdateX()
 {
-    position.x += movement_.x;
-    position.y += movement_.y;
+    position.x += potentialMovement.x * GetFrameTime();
 }
 
 
+void Player::UpdateY()
+{
+    position.y += potentialMovement.y * GetFrameTime();
+}
+
+
+// Collisions
 void Player::ResetPositionX()
 {
-    position.x -= potentialMovement.x;
+    position.x -= potentialMovement.x * GetFrameTime();
 }
 
 
 void Player::ResetPositionY()
 {
-    position.y -= potentialMovement.y;
+    position.y -= potentialMovement.y * GetFrameTime();
 }
 
 
-void Player::SetPositionInViewSpace(const Vector2& position_)
-{
-    positionInViewSpace = position_;
-}
-
-
+// Informations
 Vector2 Player::GetPosition()
 {
     return position;
@@ -72,7 +74,6 @@ Rectangle Player::GetRectangleInViewSpace()
 }
 
 
-
 float Player::GetSpeed() 
 {
     return speed;
@@ -85,7 +86,22 @@ Vector2 Player::GetPositionInViewSpace()
 }
 
 
+// Draw
 void Player::Draw() const
 {
     DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, size.x, size.y, bg);
 }
+
+
+void Player::SetPositionInViewSpace(const Vector2& position_)
+{
+    positionInViewSpace = position_;
+}
+
+
+
+
+
+
+
+

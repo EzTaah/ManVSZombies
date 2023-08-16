@@ -7,14 +7,31 @@
 
 
 ZombieManager::ZombieManager()
-    : zombieSpeed({10.0f, 10.0f}), zombieSize({30.0f, 30.0f}), lastUpdateTimeEvent1(0.0f)
+    : zombieSpeed(200.0f), zombieSize({30.0f, 30.0f}), lastUpdateTimeEvent1(0.0f)
 {}
 
 
-void ZombieManager::Clear()
+void ZombieManager::SetupPotentialMovement(const Rectangle& playerRectangle_)
 {
-    // To remove all bullets and reset the manager.
+    // Update Zombies
+    for (Zombie& elt : zombiesArray)
+        elt.SetupPotentialMovement(playerRectangle_);
 }
+
+ 
+void ZombieManager::UpdateX()
+{
+    for (Zombie& elt : zombiesArray)
+        elt.UpdateX();
+}
+
+
+void ZombieManager::UpdateY()
+{
+    for (Zombie& elt : zombiesArray)
+        elt.UpdateY();
+}
+
 
 
 void ZombieManager::SpawnNewZombie()
@@ -48,16 +65,7 @@ void ZombieManager::SpawnNewZombie()
 }
 
 
-void ZombieManager::Update(const Rectangle& playerRectangle_)
-{
-    // Spawn new zombies
-    if (EventTriggered(1, lastUpdateTimeEvent1)) 
-        SpawnNewZombie();
 
-    // Update Zombies
-    for (Zombie& elt : zombiesArray)
-        elt.Update(playerRectangle_);
-}
 
 
 void ZombieManager::KillZombie(int index_)

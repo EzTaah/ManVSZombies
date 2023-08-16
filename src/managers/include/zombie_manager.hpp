@@ -7,16 +7,18 @@
 class ZombieManager
 {
 public:
-    // Initialization and Cleanup
     ZombieManager();
-    void Clear();    // To remove all zombies and reset the manager.
+
+    // Update
+    void SetupPotentialMovement(const Rectangle& playerRectangle_);
+    void UpdateX();
+    void UpdateY();
 
     // Zombie Creation
     void SpawnNewZombie();
 
-    // Update
-    void Update(const Rectangle& playerRectangle_);
 
+ 
     // Zombies Management
     void KillZombie(int index_);
 
@@ -30,7 +32,7 @@ private:
     void RemoveZombie(int index_);
 
     std::vector<Zombie> zombiesArray;
-    Vector2 zombieSpeed;
+    float zombieSpeed;
     Vector2 zombieSize;
     double lastUpdateTimeEvent1;
 };

@@ -6,14 +6,26 @@ Bullet::Bullet(Vector2 position_, Vector2 speed_, Vector2 size_)
       position(position_),
       speed(speed_), 
       size(size_),
-      bg(BLACK)
+      bg(PURPLE)
 {}
 
 
-void Bullet::Update()
+void Bullet::SetupPotentialMovement()
 {
-    position.x += speed.x * GetFrameTime();
-    position.y += speed.y * GetFrameTime();
+    potentialMovement.x = speed.x;
+    potentialMovement.y = speed.y; 
+}
+
+
+void Bullet::UpdateX()
+{
+    position.x += potentialMovement.x * GetFrameTime();
+}
+
+
+void Bullet::UpdateY()
+{
+    position.y += potentialMovement.y * GetFrameTime();
 }
 
 

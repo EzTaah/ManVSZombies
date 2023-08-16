@@ -6,18 +6,36 @@
 class Zombie : public Entity
 {
 public:
-    Zombie(Vector2 position_, Vector2 speed_, Vector2 size_);
-    void Update(Rectangle playerRectangle_);
-    void Draw() const override;
+    Zombie(Vector2 position_, float speed_, Vector2 size_);
 
-    Rectangle GetRectangle();
-    Vector2 GetPositionInViewSpace();
+    // Update
+    void SetupPotentialMovement(Rectangle playerRectangle_);
+
+    // Move
+    void SetPosition(Vector2 position_);
+    void UpdateX();
+    void UpdateY();
+
+    // Collisions
+    void ResetPositionX();
+    void ResetPositionY();
+
+    // Informations
     Vector2 GetPosition();
+    Vector2 GetPotentialMovement();
+    Rectangle GetRectangle();
+    float GetSpeed();
+    Vector2 GetPositionInViewSpace();
+
+    // Rendering
+    void Draw() const override;
     void SetPositionInViewSpace(const Vector2& position_);
+
 
 private:
     Vector2 position;
-    Vector2 speed;
+    Vector2 potentialMovement;
+    float speed;
     Vector2 size;
     Color bg;
     Vector2 positionInViewSpace;

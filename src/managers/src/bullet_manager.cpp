@@ -34,12 +34,6 @@ BulletManager::BulletManager()
     : bulletSpeed(1500.0f), bulletSize({7.0f, 7.0f})
 {}
 
-
-void BulletManager::Clear()
-{
-    // To remove all bullets and reset the manager.
-}
-
  
 void BulletManager::ShootNewBullet(const Rectangle& playerRectangle_, const Rectangle& playerRectangleInViewSpace_)
 {
@@ -48,13 +42,27 @@ void BulletManager::ShootNewBullet(const Rectangle& playerRectangle_, const Rect
 }
 
 
-void BulletManager::Update()
+void BulletManager::SetupPotentialMovement()
 {
     // Update the bullets
     for (Bullet& elt : bulletsArray)
     {
-        elt.Update();
+        elt.SetupPotentialMovement();
     }
+}
+
+
+void BulletManager::UpdateX()
+{
+    for (Bullet& elt : bulletsArray)
+        elt.UpdateX();
+}
+
+
+void BulletManager::UpdateY()
+{
+    for (Bullet& elt : bulletsArray)
+        elt.UpdateY();
 }
 
 

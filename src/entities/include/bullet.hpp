@@ -9,8 +9,12 @@ public:
     Bullet(Vector2 position_, Vector2 speed_, Vector2 size_);
 
     // Update
-    void Update() override;
-    void SetPositionInViewSpace(const Vector2& position_);
+    void SetupPotentialMovement();
+
+    // Move
+    void UpdateX();
+    void UpdateY();
+
 
     // Information
     Rectangle GetRectangle();
@@ -19,10 +23,12 @@ public:
 
     // Rendering
     void Draw() const override;
+    void SetPositionInViewSpace(const Vector2& position_);
 
 
 private:
     Vector2 position;
+    Vector2 potentialMovement;
     Vector2 speed;
     Vector2 size;
     Color bg;

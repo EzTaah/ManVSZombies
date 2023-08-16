@@ -20,8 +20,14 @@ public:
 
 private:
     void HandleInputs();
-    void UpdateEntities();
-    void HandleCollisions();
+    void SetPotentialMovementEntities();
+
+    void UpdateEntitiesX();
+    void HandleCollisionsX();
+
+    void UpdateEntitiesY();
+    void HandleCollisionsY();
+
 
     bool isGameOver;
     double lastUpdateTimeEvent1;

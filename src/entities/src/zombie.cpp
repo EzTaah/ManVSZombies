@@ -1,29 +1,18 @@
 #include "zombie.hpp"
+#include <cmath>
 
 
 /// UTILITY FUNCTIONS //////////////////
 Vector2 DescisionMaking(Rectangle playerRectangle_, Rectangle zombieRectangle_)
 {
-    Vector2 direction;
+    // Calculate the direction based on the position of the zombie and player
+    Vector2 direction = {playerRectangle_.x - zombieRectangle_.x, playerRectangle_.y - zombieRectangle_.y };
 
-    if (playerRectangle_.x - zombieRectangle_.x < 0) {
-        direction.x = -1;
-    } 
-    else if(playerRectangle_.x - zombieRectangle_.x == 0) {
-        direction.x = 0;
-    }
-    else {
-        direction.x = 1;
-    }
-
-    if (playerRectangle_.y - zombieRectangle_.y < 0) {
-        direction.y = -1;
-    } 
-    else if(playerRectangle_.y - zombieRectangle_.y == 0) {
-        direction.y = 0;
-    }
-    else {
-        direction.y = 1;
+    // Normalize the direction
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+    if (length != 0) {  // Avoid division by zero
+        direction.x /= length;
+        direction.y /= length;
     }
 
     return direction;
@@ -32,21 +21,70 @@ Vector2 DescisionMaking(Rectangle playerRectangle_, Rectangle zombieRectangle_)
 ////////////////////////////////////////
 
 
-Zombie::Zombie(Vector2 position_, Vector2 speed_, Vector2 size_)
+Zombie::Zombie(Vector2 position_, float speed_, Vector2 size_)
     : Entity(), 
       position(position_), 
       speed(speed_), 
       size(size_),
-      bg(RED)
+      bg(RED),
+      potentialMovement({0.0f, 0.0f})
 {}
 
 
-void Zombie::Update(Rectangle playerRectangle_)
+// Update
+void Zombie::SetupPotentialMovement(Rectangle playerRectangle_)
 {
-    Vector2 direction = DescisionMaking(playerRectangle_, GetRectangle());      // Return the direction the zombie needs to go to reach the player
+    // Find the direction the zombie needs to go to reach the player
+    Vector2 direction = DescisionMaking(playerRectangle_, GetRectangle());
 
-    position.x += direction.x;
-    position.y += direction.y;
+    // Calculate the delpacement the zombie will do
+    potentialMovement.x = direction.x * speed;
+    potentialMovement.y = direction.y * speed;
+}
+
+
+// Move
+void Zombie::SetPosition(Vector2 position_) 
+{
+    position = position_;
+}
+
+
+void Zombie::UpdateX()
+{
+    position.x += potentialMovement.x * GetFrameTime();
+}
+
+
+void Zombie::UpdateY()
+{
+    position.y += potentialMovement.y * GetFrameTime();
+}
+
+
+// Collisions
+void Zombie::ResetPositionX()
+{
+    position.x -= potentialMovement.x * GetFrameTime();
+}
+
+
+void Zombie::ResetPositionY()
+{
+    position.y -= potentialMovement.y * GetFrameTime();
+}
+
+
+// Informations
+Vector2 Zombie::GetPosition()
+{
+    return position;
+}
+
+
+Vector2 Zombie::GetPotentialMovement()
+{
+    return potentialMovement;
 }
 
 
@@ -56,15 +94,9 @@ Rectangle Zombie::GetRectangle()
 }
 
 
-void Zombie::Draw() const
+float Zombie::GetSpeed() 
 {
-    DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, size.x, size.y, bg);
-}
-
-
-void Zombie::SetPositionInViewSpace(const Vector2& position_)
-{
-    positionInViewSpace = position_;
+    return speed;
 }
 
 
@@ -74,7 +106,14 @@ Vector2 Zombie::GetPositionInViewSpace()
 }
 
 
-Vector2 Zombie::GetPosition()
+// Draw
+void Zombie::Draw() const
 {
-    return position;
+    DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, size.x, size.y, bg);
+}
+
+
+void Zombie::SetPositionInViewSpace(const Vector2& position_)
+{
+    positionInViewSpace = position_;
 }
