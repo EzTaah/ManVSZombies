@@ -15,7 +15,7 @@ public:
     void UpdateY();
 
     // Zombie Creation
-    void SpawnNewZombie();
+    void SpawnNewZombie(Vector2 gridDimention_);
 
 
  

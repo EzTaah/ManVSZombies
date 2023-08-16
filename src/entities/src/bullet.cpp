@@ -4,9 +4,9 @@
 Bullet::Bullet(Vector2 position_, Vector2 speed_, Vector2 size_)
     : Entity(),
       position(position_),
-      speed(speed_), 
+      speed(speed_),
       size(size_),
-      bg(PURPLE)
+      bg(GREEN)
 {}
 
 

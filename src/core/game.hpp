@@ -23,10 +23,9 @@ private:
     void SetPotentialMovementEntities();
 
     void UpdateEntitiesX();
-    void HandleCollisionsX();
-
     void UpdateEntitiesY();
-    void HandleCollisionsY();
+
+    void HandleCollisions(char mode_);
 
 
     bool isGameOver;

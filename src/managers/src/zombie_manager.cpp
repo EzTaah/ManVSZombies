@@ -7,7 +7,9 @@
 
 
 ZombieManager::ZombieManager()
-    : zombieSpeed(200.0f), zombieSize({30.0f, 30.0f}), lastUpdateTimeEvent1(0.0f)
+    : zombieSpeed(200.0f), 
+      zombieSize({30.0f, 30.0f}),
+      lastUpdateTimeEvent1(0.0f)
 {}
 
 
@@ -34,7 +36,7 @@ void ZombieManager::UpdateY()
 
 
 
-void ZombieManager::SpawnNewZombie()
+void ZombieManager::SpawnNewZombie(Vector2 gridDimention_)
 {
     Vector2 spawnLocation;
     // which side
@@ -42,22 +44,22 @@ void ZombieManager::SpawnNewZombie()
     {
         case 0:
             spawnLocation.x = -30;
-            spawnLocation.y = myUtils::GetRandomNumber(0, GetScreenHeight());   // Choose a random position on this side
+            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention_.y);   // Choose a random position on this side
             break;
 
         case 1:
-            spawnLocation.x = GetScreenWidth();
-            spawnLocation.y = myUtils::GetRandomNumber(0, GetScreenHeight());
+            spawnLocation.x = gridDimention_.x;
+            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention_.y);
             break;
 
         case 2:
-            spawnLocation.x = myUtils::GetRandomNumber(0, GetScreenWidth());
+            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention_.x);
             spawnLocation.y = -30;
             break;
 
         case 3:
-            spawnLocation.x = myUtils::GetRandomNumber(0, GetScreenWidth());
-            spawnLocation.y = GetScreenHeight();
+            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention_.x);
+            spawnLocation.y = gridDimention_.y;
             break;
     }
 
