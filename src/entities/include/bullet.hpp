@@ -1,47 +1,32 @@
 #pragma once
-#include "entity.hpp"
 #include <raylib.hpp>
 
 
-class Bullet : public Entity
+class Bullet
 {
 public:
-    Bullet(Vector2 position_, Vector2 speed_, Vector2 size_);
+    Bullet(const Vector2& position, const Vector2& speed);
 
-    // Update
-    void SetupPotentialMovement();
+    // === Accessors ===
+    Vector2 GetPosition() const;
+    Vector2 GetPositionInViewSpace() const;
+    Rectangle GetRectangle() const;
 
-    // Move
-    void UpdateX();
-    void UpdateY();
+    // === Setters ===
+    void SetPositionInViewSpace(const Vector2& position);
 
+    // === Movemement & Logic ===
+    void CalculateNextMove();
+    void UpdateHorizontalPosition();
+    void UpdateVerticalPosition();
 
-    // Information
-    Rectangle GetRectangle();
-    Vector2 GetPositionInViewSpace();
-    Vector2 GetPosition();
-
-    // Rendering
-    void Draw() const override;
-    void SetPositionInViewSpace(const Vector2& position_);
-
+    // === Rendering ===
+    void Render() const;
 
 private:
-    Vector2 position;
-    Vector2 potentialMovement;
-    Vector2 speed;
-    Vector2 size;
-    Color bg;
-    Vector2 positionInViewSpace;
+    Vector2 _position;
+    Vector2 _positionInViewSpace;
+    Vector2 _potentialMovement;
+    Vector2 _speed;
+    Vector2 _size;
 };
-
-
-
-
-/*
-bool IsOutside();
-
-bool IsCollidingWithEnemy(EntityAttributes enemyAttributes_);
-
-
-*/

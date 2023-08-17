@@ -6,41 +6,36 @@
 #include <algorithm>
 
 
-/// PUBLIC /////////////////
+///////////////// PUBLIC /////////////////
 Game::Game() 
-    : gridManager(),
-      inputManager(),
-      player(),
-      bulletManager(),
-      zombieManager(),
-      wallManager(),
-      isGameOver(false)
-{
-    // Setup grid
-    gridManager.InitGrid();
-    grid = gridManager.GetGrid();
-
-    // Setup camera
-    renderer = Renderer(player.GetRectangle());
-
-    // Setup walls
-    wallManager.InitWalls(grid);
-
-    // Setup collisionManager
-    collisionManager = CollisionManager(grid);
-}
-
+    : _lastUpdateTimeEvent1(0.0f),
+      _gridManager(),
+      _player({400.0f, 600.0f}),
+      _bulletManager(),
+      _zombieManager(),
+      _wallManager(_gridManager.GetGrid()),     // Init all the walls
+      _collisionManager(),
+      _renderer(_player.GetRectangle())     // Setup camera
+{}
 
 void Game::Update() {
-    HandleInputs();
-    SetPotentialMovementEntities();
+    _HandleInputs();
+    _CalculateNextMoveEntities();
 
-    UpdateEntitiesX();
-    HandleCollisions('x');
+    _UpdateHorizontalPositionEntities();
+    _HandleCollisions('x');
 
-    UpdateEntitiesY();
-    HandleCollisions('y');
+    _UpdateVerticalPositionEntities();
+    _HandleCollisions('y');
 }
+
+void Game::Render()
+{
+    _renderer.UpdateCameraPosition(_player.GetRectangle());
+    _renderer.UpdatePositionInViewSpaceEntities(_gridManager, _player, _bulletManager, _zombieManager, _wallManager);
+    _renderer.Render(_gridManager, _player, _bulletManager, _zombieManager, _wallManager);
+}
+
 
 
 /// PRIVATE  /////////////////
@@ -72,7 +67,7 @@ void Game::HandleInputs()
 void Game::SetPotentialMovementEntities()
 {
     // Spawn new zombies if needed
-    if (EventTriggered(10, lastUpdateTimeEvent1)) 
+    if (EventTriggered(4, lastUpdateTimeEvent1)) 
         zombieManager.SpawnNewZombie(gridManager.GetGridDimensions());
 
     zombieManager.SetupPotentialMovement(player.GetRectangle());
@@ -291,10 +286,11 @@ void Game::HandleCollisions(char mode_)
     // Check for bullets boundary collision
     for(unsigned int i{0} ; i < bulletManager.GetBulletsArray().size() ; ++i)
     {
-        if(collisionManager.IsOutsideBoundaryY(bulletManager.GetBulletsArray()[i].GetRectangle())) 
+        bool isOutsideBoundaryY = collisionManager.IsOutsideBoundaryY(bulletManager.GetBulletsArray()[i].GetRectangle());
+        bool isOutsideBoundaryX = collisionManager.IsOutsideBoundaryX(bulletManager.GetBulletsArray()[i].GetRectangle());
+        if(isOutsideBoundaryX || isOutsideBoundaryY) 
             bulletManager.RemoveBullet(i);
     }
-
 }
 
 
@@ -303,21 +299,3 @@ void Game::HandleCollisions(char mode_)
 
 
 
-void Game::RenderScene()
-{
-    // std::cout << "----------------------------------------------" << std::endl;
-    // std::cout << "X Camera position : " << renderer.camera.GetPosition().x << std::endl;
-    // std::cout << "Y Camera position : " << renderer.camera.GetPosition().y << std::endl;
-
-    // std::cout << "X lLayer position : " << player.GetPosition().x << std::endl;
-    // std::cout << "Y Player position : " << player.GetPosition().y << std::endl;
-
-    // std::cout << "X Player positionInViewSpace : " << player.GetPositionInViewSpace().x << std::endl;
-    // std::cout << "Y Player positionInViewSpace : " << player.GetPositionInViewSpace().y << std::endl;
-    // std::cout << "----------------------------------------------" << std::endl;
-
-
-    renderer.UpdateCamera(player.GetRectangle());
-    renderer.UpdateAllEntitiesPositionInViewSpace(gridManager, player, bulletManager.GetBulletsArray(), zombieManager.GetZombiesArray(), wallManager.GetWallsArray());
-    renderer.Draw(gridManager, player, bulletManager.GetBulletsArray(), zombieManager.GetZombiesArray(), wallManager.GetWallsArray());
-}

@@ -5,13 +5,81 @@
 #include <vector>
 
 
-/// UTILITY FUNCTIONS //////////////////
-Vector2 CalculateBulletDirection(const Rectangle& playerRectangle_, float bulletSpeed_)
+BulletManager::BulletManager()
+    : _bulletsArray(),
+      _bulletSpeed(1500.0f)
+{}
+
+
+// === Utility functions ===
+Vector2 CalculateBulletDirection(const Rectangle& playerRectangle, float bulletSpeed);
+
+
+// === Accessors ===
+std::vector<Bullet> BulletManager::GetBulletsArray() const {
+    return _bulletsArray;
+}
+
+std::vector<Rectangle> BulletManager::GetBulletsRectangle() const
+{
+    std::vector<Rectangle> bulletsRectangleArray;
+    for(const Bullet& bullet : _bulletsArray)
+        bulletsRectangleArray.push_back(bullet.GetRectangle());
+    
+    return bulletsRectangleArray;
+}
+
+
+// === Mutators ===
+void BulletManager::ShootNewBullet(const Rectangle& playerRectangle, const Rectangle& playerRectangleInViewSpace)
+{
+    const Vector2 bulletDirection = CalculateBulletDirection(playerRectangleInViewSpace, _bulletSpeed);
+    _bulletsArray.push_back(Bullet({playerRectangle.x, playerRectangle.y}, {bulletDirection.x, bulletDirection.y}));
+}
+
+void BulletManager::RemoveBullet(int index) {
+    _bulletsArray.erase(_bulletsArray.begin() + index);
+}
+
+void BulletManager::SetPositionInViewSpaceBullets(const Vector2& cameraPosition)
+{
+    for (Bullet& bullet : _bulletsArray)
+    {
+        Vector2 bulletPositionInViewSpace;
+        bulletPositionInViewSpace.x = bullet.GetPosition().x - cameraPosition.x;
+        bulletPositionInViewSpace.y = bullet.GetPosition().y - cameraPosition.y;
+        bullet.SetPositionInViewSpace(bulletPositionInViewSpace);
+    }
+}
+
+
+// === Movemement & Logic ===
+void BulletManager::CalculateNextMoveBullets()
+{
+    for (Bullet& bullet : _bulletsArray)
+        bullet.CalculateNextMove();
+}
+
+void BulletManager::UpdateHorizontalPositionBullets()
+{
+    for (Bullet& bullet : _bulletsArray)
+        bullet.UpdateHorizontalPosition();
+}
+
+void BulletManager::UpdateVerticalPositionBullets()
+{
+    for (Bullet& bullet : _bulletsArray)
+        bullet.UpdateVerticalPosition();
+}
+
+
+// ==================
+Vector2 CalculateBulletDirection(const Rectangle& playerRectangle, float bulletSpeed)
 {
     Vector2 mousePosition = GetMousePosition();     // get a vector containing the mouse position
 
     // Calculate the direction from the player to the mouse
-    Vector2 direction = { mousePosition.x - playerRectangle_.x, mousePosition.y - playerRectangle_.y };
+    Vector2 direction = { mousePosition.x - playerRectangle.x, mousePosition.y - playerRectangle.y };
 
     // Normalize the direction
     float length = sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -21,74 +89,8 @@ Vector2 CalculateBulletDirection(const Rectangle& playerRectangle_, float bullet
     }
 
     // Scale by bullet speed
-    direction.x *= bulletSpeed_;
-    direction.y *= bulletSpeed_;
+    direction.x *= bulletSpeed;
+    direction.y *= bulletSpeed;
 
     return direction;
-}
-
-///////////////////////////////////////
-
-
-BulletManager::BulletManager()
-    : bulletSpeed(1500.0f), bulletSize({7.0f, 7.0f})
-{}
-
- 
-void BulletManager::ShootNewBullet(const Rectangle& playerRectangle_, const Rectangle& playerRectangleInViewSpace_)
-{
-    Vector2 bulletDirection = CalculateBulletDirection(playerRectangleInViewSpace_, bulletSpeed);
-    bulletsArray.push_back(Bullet({playerRectangle_.x, playerRectangle_.y}, {bulletDirection.x, bulletDirection.y}, bulletSize));
-}
-
-
-void BulletManager::SetupPotentialMovement()
-{
-    // Update the bullets
-    for (Bullet& elt : bulletsArray)
-    {
-        elt.SetupPotentialMovement();
-    }
-}
-
-
-void BulletManager::UpdateX()
-{
-    for (Bullet& elt : bulletsArray)
-        elt.UpdateX();
-}
-
-
-void BulletManager::UpdateY()
-{
-    for (Bullet& elt : bulletsArray)
-        elt.UpdateY();
-}
-
-
-void BulletManager::RemoveBullet(int index_)
-{
-    bulletsArray.erase(bulletsArray.begin() + index_);
-}
-
-
-int BulletManager::GetActiveBulletsCount()
-{
-    // Get the number of bullet actually on the screen
-}
-
-
-std::vector<Bullet>& BulletManager::GetBulletsArray()
-{
-    return bulletsArray;
-}
-
-
-std::vector<Rectangle> BulletManager::GetBulletsRectangle()
-{
-    std::vector<Rectangle> bulletsRectangleArray;
-    for(Bullet& elt : bulletsArray)
-        bulletsRectangleArray.push_back(elt.GetRectangle());
-    
-    return bulletsRectangleArray;
 }

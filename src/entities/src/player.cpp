@@ -1,107 +1,77 @@
 #include "player.hpp"
 
 
-Player::Player() 
-    : Entity(), 
-      position({1600.0f, 70.0f}), 
-      speed(300.0f), 
-      size({30.0f, 30.0f}),
-      bg(GREEN),
-      potentialMovement({0.0f, 0.0f})
+Player::Player(const Vector2& position) 
+    : _position(position),
+      _positionInViewSpace(position),
+      _potentialMovement({0.0f, 0.0f}),
+      _speed({0.0f, 0.0f}),
+      _size({30.0f, 30.0f})
 {}
 
 
-// Move
-void Player::SetPosition(Vector2 position_) 
-{
-    position = position_;
+// === Accessors ===
+Vector2 Player::GetPosition() const {
+    return _position;
+}
+
+Vector2 Player::GetPositionInViewSpace() const {
+    return _positionInViewSpace;
+}
+
+Vector2 Player::GetPotentialMovement() const {
+    return _potentialMovement;
+}
+
+Rectangle Player::GetRectangle() const {
+    return {_position.x, _position.y, _size.x, _size.y};
+}
+
+Rectangle Player::GetRectangleInViewSpace() const {
+    return {_positionInViewSpace.x, _positionInViewSpace.y, _size.x, _size.y};
+}
+
+Vector2 Player::GetSpeed() const {
+    return _speed;
 }
 
 
-void Player::SetPotentialMovement(Vector2 movement_)
+// === Setters ===
+void Player::SetPosition(const Vector2& newPosition) {
+    _position = newPosition;
+}
+
+void Player::SetPositionInViewSpace(const Vector2& newPositionInViewSpace) {
+    _positionInViewSpace = newPositionInViewSpace;
+}
+
+void Player::SetPotentialMovement(const Vector2& movement)
 {
-    potentialMovement = movement_;
+    _potentialMovement = movement;
 }
 
 
-void Player::UpdateX()
-{
-    position.x += potentialMovement.x * GetFrameTime();
+// === Movemement & Logic ===
+void Player::UpdateHorizontalPosition() {
+    _position.x += _potentialMovement.x * GetFrameTime();
+}
+
+void Player::UpdateVerticalPosition() {
+    _position.y += _potentialMovement.y * GetFrameTime();
 }
 
 
-void Player::UpdateY()
-{
-    position.y += potentialMovement.y * GetFrameTime();
+// === Collision Handling ===
+void Player::RevertHorizontalPosition() {
+    _position.x -= _potentialMovement.x * GetFrameTime();
+}
+
+void Player::RevertVerticalPosition() {
+    _position.y -= _potentialMovement.y * GetFrameTime();
 }
 
 
-// Collisions
-void Player::ResetPositionX()
-{
-    position.x -= potentialMovement.x * GetFrameTime();
+// === Rendering ===
+void Player::Render() const {
+    DrawRectangle(_positionInViewSpace.x, _positionInViewSpace.y, _size.x, _size.y, GREEN);
 }
-
-
-void Player::ResetPositionY()
-{
-    position.y -= potentialMovement.y * GetFrameTime();
-}
-
-
-// Informations
-Vector2 Player::GetPosition()
-{
-    return position;
-}
-
-
-Vector2 Player::GetPotentialMovement()
-{
-    return potentialMovement;
-}
-
-
-Rectangle Player::GetRectangle()
-{
-    return {position.x, position.y, size.x, size.y};
-}
-
-
-Rectangle Player::GetRectangleInViewSpace()
-{
-    return {positionInViewSpace.x, positionInViewSpace.y, size.x, size.y};
-}
-
-
-float Player::GetSpeed() 
-{
-    return speed;
-}
-
-
-Vector2 Player::GetPositionInViewSpace()
-{
-    return positionInViewSpace;
-}
-
-
-// Draw
-void Player::Draw() const
-{
-    DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, size.x, size.y, bg);
-}
-
-
-void Player::SetPositionInViewSpace(const Vector2& position_)
-{
-    positionInViewSpace = position_;
-}
-
-
-
-
-
-
-
-

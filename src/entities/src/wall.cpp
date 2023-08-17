@@ -1,38 +1,32 @@
 #include "wall.hpp"
 
 
-Wall::Wall(std::array<int, 2> gridPosition_)
-    : Entity(), 
-      position({30.0f * gridPosition_[1], 30.0f * gridPosition_[0]})
+Wall::Wall(const Vector2& position)
+    : _position(position),
+      _positionInViewSpace(position),
+      _size({30.0f, 30.0f})
 {}
 
 
-void Wall::Draw() const
-{
-    DrawRectangle(positionInViewSpace.x, positionInViewSpace.y, 30.0f, 30.0f, BLACK);
+// === Accessors ===
+Vector2 Wall::GetPosition() const {
+    return _position;
+}
+
+Vector2 Wall::GetPositionInViewSpace() const {
+    return _positionInViewSpace;
+}
+
+Rectangle Wall::GetRectangle() const {
+    return {_position.x, _position.y, _size.x, _size.y};
 }
 
 
-Rectangle Wall::GetRectangle()
-{
-    return {position.x, position.y, 30.0f, 30.0f};
+// === Setters ===
+void Wall::SetPosition(const Vector2& newPosition) {
+    _position = newPosition;
 }
 
-
-void Wall::SetPositionInViewSpace(const Vector2& position_)
-{
-    positionInViewSpace = position_;
+void Wall::SetPositionInViewSpace(const Vector2& newPositionInViewSpace) {
+    _positionInViewSpace = newPositionInViewSpace;
 }
-
-
-Vector2 Wall::GetPositionInViewSpace()
-{
-    return positionInViewSpace;
-}
-
-
-Vector2 Wall::GetPosition()
-{
-    return position;
-}
-

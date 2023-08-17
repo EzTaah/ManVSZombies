@@ -1,16 +1,16 @@
 #include "game_camera.hpp"
 
 
-GameCamera::GameCamera() {}
+GameCamera::GameCamera() 
+    : _position()
+{}
 
 
-void GameCamera::SetPosition(Vector2 position_) 
-{
-    position = position_;
+// === Accessors ===
+Vector2 GameCamera::GetPosition() {
+    return _position;
 }
 
-
-Vector2 GameCamera::GetPosition()
-{
-    return position;
+void GameCamera::SetPosition(const Vector2& newPosition) {
+    _position = newPosition;
 }

@@ -7,14 +7,16 @@
 class WallManager
 {
 public:
-    WallManager();
+    WallManager(const std::vector<std::vector<int>>& grid);
 
-    void InitWalls(const std::vector<std::vector<int>>& grid_);
+    // === Accessors ===
+    std::vector<Wall> GetWallsArray() const;
+    std::vector<Rectangle> GetWallsRectangle() const;
 
-    std::vector<Wall>& GetWallsArray();
-    std::vector<Rectangle> GetWallsRectangle();
+    // === Mutators ===
+    void SetPositionInViewSpaceWalls(const Vector2& cameraPosition);
 
 
 private:
-    std::vector<Wall> wallsArray;
+    std::vector<Wall> _wallsArray;
 };

@@ -3,36 +3,46 @@
 #include <array>
 
 
-WallManager::WallManager() {}
-
-
-void WallManager::InitWalls(const std::vector<std::vector<int>>& grid_)
+WallManager::WallManager(const std::vector<std::vector<int>>& grid) 
+    : _wallsArray()
 {
-    for(unsigned int i{0} ; i < grid_.size() ; ++i)
+    for(unsigned int i{0} ; i < grid.size() ; ++i)
     {
-        for(unsigned int n{0} ; n < grid_[i].size() ; ++n)
+        for(unsigned int n{0} ; n < grid[i].size() ; ++n)
         {
-            if(grid_[i][n] == 1)
+            if(grid[i][n] == 1)
             {
-                std::array<int, 2> gridPosition = {i, n};
-                wallsArray.push_back(Wall(gridPosition));
+                Vector2 wallPosition = {30.0f * i, 30.0f * n};
+                _wallsArray.push_back(Wall(wallPosition));
             }
         }
     }
 }
 
 
-std::vector<Wall>& WallManager::GetWallsArray()
+// === Accessors ===
+std::vector<Wall> WallManager::GetWallsArray() const {
+    return _wallsArray;
+}
+
+std::vector<Rectangle> WallManager::GetWallsRectangle() const
 {
-    return wallsArray;
+    std::vector<Rectangle> wallsRectangleArray;
+    for(const Wall& wall : _wallsArray)
+        wallsRectangleArray.push_back(wall.GetRectangle());
+    
+    return wallsRectangleArray;
 }
 
 
-std::vector<Rectangle> WallManager::GetWallsRectangle()
+// === Mutators ===
+void WallManager::SetPositionInViewSpaceWalls(const Vector2& cameraPosition)
 {
-    std::vector<Rectangle> wallsRectangleArray;
-    for(Wall& elt : wallsArray)
-        wallsRectangleArray.push_back(elt.GetRectangle());
-    
-    return wallsRectangleArray;
+    for (Wall& wall : _wallsArray)
+    {
+        Vector2 wallPositionInViewSpace;
+        wallPositionInViewSpace.x = wall.GetPosition().x - cameraPosition.x;
+        wallPositionInViewSpace.y = wall.GetPosition().y - cameraPosition.y;
+        wall.SetPositionInViewSpace(wallPositionInViewSpace);
+    }
 }

@@ -9,30 +9,21 @@ class ZombieManager
 public:
     ZombieManager();
 
-    // Update
-    void SetupPotentialMovement(const Rectangle& playerRectangle_);
-    void UpdateX();
-    void UpdateY();
+    // === Accessors ===
+    std::vector<Zombie> GetZombiesArray() const;
+    std::vector<Rectangle> GetZombiesRectangle() const;
 
-    // Zombie Creation
-    void SpawnNewZombie(Vector2 gridDimention_);
+    // === Mutators ===
+    void SpawnNewZombie(const Vector2& gridDimention);
+    void RemoveZombie(int index);
+    void SetPositionInViewSpaceZombies(const Vector2& cameraPosition);
 
-
- 
-    // Zombies Management
-    void KillZombie(int index_);
-
-    // Information
-    int GetActiveZombiesCount();
-    std::vector<Zombie>& GetZombiesArray();   // Retrieve the array of all zombies currently managed by the ZombieManager.
-    std::vector<Rectangle> GetZombiesRectangle();
-
+    // === Movemement & Logic ===
+    void CalculateNextMoveZombies(const Rectangle& playerRectangle);
+    void UpdateHorizontalPositionZombies();
+    void UpdateVerticalPositionZombies();
 
 private:
-    void RemoveZombie(int index_);
-
-    std::vector<Zombie> zombiesArray;
-    float zombieSpeed;
-    Vector2 zombieSize;
-    double lastUpdateTimeEvent1;
+    std::vector<Zombie> _zombiesArray;
+    double _lastUpdateTimeEvent1;
 };

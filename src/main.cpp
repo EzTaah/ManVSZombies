@@ -11,7 +11,7 @@ int main()
     while (!WindowShouldClose())
     {
         game.Update();
-        game.RenderScene();
+        game.Render();
     }
     CloseWindow();
     return 0;

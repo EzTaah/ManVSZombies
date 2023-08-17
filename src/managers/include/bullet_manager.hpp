@@ -9,28 +9,21 @@ class BulletManager
 public:
     BulletManager();
 
-    // Update
-    void SetupPotentialMovement();
-    void UpdateX();
-    void UpdateY();
+    // === Accessors ===
+    std::vector<Bullet> GetBulletsArray() const;
+    std::vector<Rectangle> GetBulletsRectangle() const;
 
-    // Bullet Creation
-    void ShootNewBullet(const Rectangle& playerRectangle_, const Rectangle& playerRectangleInViewSpace_);
+    // === Mutators ===
+    void ShootNewBullet(const Rectangle& playerRectangle, const Rectangle& playerRectangleInViewSpace);
+    void RemoveBullet(int index);
+    void SetPositionInViewSpaceBullets(const Vector2& cameraPosition);
 
-    // Update
-    void Update();
-
-    // Bullet Management
-    void RemoveBullet(int index_);
-
-    // Information
-    int GetActiveBulletsCount();
-    std::vector<Bullet>& GetBulletsArray();   // Retrieve the array of all bullets currently managed by the BulletManager.
-    std::vector<Rectangle> GetBulletsRectangle();
-
+    // === Movemement & Logic ===
+    void CalculateNextMoveBullets();
+    void UpdateHorizontalPositionBullets();
+    void UpdateVerticalPositionBullets();
 
 private:
-    std::vector<Bullet> bulletsArray;
-    float bulletSpeed;
-    Vector2 bulletSize;
+    std::vector<Bullet> _bulletsArray;
+    float _bulletSpeed;
 };

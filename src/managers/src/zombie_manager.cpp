@@ -7,36 +7,28 @@
 
 
 ZombieManager::ZombieManager()
-    : zombieSpeed(200.0f), 
-      zombieSize({30.0f, 30.0f}),
-      lastUpdateTimeEvent1(0.0f)
+    : _zombiesArray(),
+      _lastUpdateTimeEvent1(0.0f)
 {}
 
 
-void ZombieManager::SetupPotentialMovement(const Rectangle& playerRectangle_)
-{
-    // Update Zombies
-    for (Zombie& elt : zombiesArray)
-        elt.SetupPotentialMovement(playerRectangle_);
+// === Accessors ===
+std::vector<Zombie> ZombieManager::GetZombiesArray() const {
+    return _zombiesArray;
 }
 
- 
-void ZombieManager::UpdateX()
+std::vector<Rectangle> ZombieManager::GetZombiesRectangle() const
 {
-    for (Zombie& elt : zombiesArray)
-        elt.UpdateX();
-}
-
-
-void ZombieManager::UpdateY()
-{
-    for (Zombie& elt : zombiesArray)
-        elt.UpdateY();
+    std::vector<Rectangle> zombiesRectangleArray;
+    for(const Zombie& zombie : _zombiesArray)
+        zombiesRectangleArray.push_back(zombie.GetRectangle());
+    
+    return zombiesRectangleArray;
 }
 
 
-
-void ZombieManager::SpawnNewZombie(Vector2 gridDimention_)
+// === Mutators ===
+void ZombieManager::SpawnNewZombie(const Vector2& gridDimention)
 {
     Vector2 spawnLocation;
     // which side
@@ -44,62 +36,56 @@ void ZombieManager::SpawnNewZombie(Vector2 gridDimention_)
     {
         case 0:
             spawnLocation.x = -30;
-            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention_.y);   // Choose a random position on this side
+            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention.y);   // Choose a random position on this side
             break;
-
         case 1:
-            spawnLocation.x = gridDimention_.x;
-            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention_.y);
+            spawnLocation.x = gridDimention.x;
+            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention.y);
             break;
-
         case 2:
-            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention_.x);
+            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention.x);
             spawnLocation.y = -30;
             break;
-
         case 3:
-            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention_.x);
-            spawnLocation.y = gridDimention_.y;
+            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention.x);
+            spawnLocation.y = gridDimention.y;
             break;
     }
 
-    zombiesArray.push_back(Zombie(spawnLocation, zombieSpeed, zombieSize));
+    _zombiesArray.push_back(Zombie(spawnLocation));
+}
+
+void ZombieManager::RemoveZombie(int index) {
+    _zombiesArray.erase(_zombiesArray.begin() + index);
+}
+
+void ZombieManager::SetPositionInViewSpaceZombies(const Vector2& cameraPosition)
+{
+    for (Zombie& zombie : _zombiesArray)
+    {
+        Vector2 zombiePositionInViewSpace;
+        zombiePositionInViewSpace.x = zombie.GetPosition().x - cameraPosition.x;
+        zombiePositionInViewSpace.y = zombie.GetPosition().y - cameraPosition.y;
+        zombie.SetPositionInViewSpace(zombiePositionInViewSpace);
+    }
 }
 
 
-
-
-
-void ZombieManager::KillZombie(int index_)
+// === Movemement & Logic ===
+void ZombieManager::CalculateNextMoveZombies(const Rectangle& playerRectangle)
 {
-    RemoveZombie(index_);
+    for (Zombie& zombie : _zombiesArray)
+        zombie.CalculateNextMove(playerRectangle);
 }
 
-
-int ZombieManager::GetActiveZombiesCount()
+void ZombieManager::UpdateHorizontalPositionZombies()
 {
-    // Get the number of bullet actually on the screen
+    for (Zombie& zombie : _zombiesArray)
+        zombie.UpdateHorizontalPosition();
 }
 
-
-std::vector<Zombie>& ZombieManager::GetZombiesArray()
+void ZombieManager::UpdateVerticalPositionZombies()
 {
-    return zombiesArray;
-}
-
-
-std::vector<Rectangle> ZombieManager::GetZombiesRectangle()
-{
-    std::vector<Rectangle> zombiesRectangleArray;
-    for(Zombie& elt : zombiesArray)
-        zombiesRectangleArray.push_back(elt.GetRectangle());
-    
-    return zombiesRectangleArray;
-}
-
-
-
-void ZombieManager::RemoveZombie(int index_)
-{
-    zombiesArray.erase(zombiesArray.begin() + index_);
+    for (Zombie& zombie : _zombiesArray)
+        zombie.UpdateVerticalPosition();
 }

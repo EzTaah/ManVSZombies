@@ -29,8 +29,6 @@ set(SOURCE_FILES
 
     src/entities/include/bullet.hpp
     src/entities/src/bullet.cpp
-    src/entities/include/entity.hpp
-    src/entities/src/entity.cpp
     src/entities/include/player.hpp
     src/entities/src/player.cpp
     src/entities/include/wall.hpp

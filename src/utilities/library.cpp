@@ -1,8 +1,8 @@
+#include "library.hpp"
 #include <cmath>
 #include <iostream>
 #include <random>
 #include <raylib.hpp>
-#include "library.hpp"
 
 
 

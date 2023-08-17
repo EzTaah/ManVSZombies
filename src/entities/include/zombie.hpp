@@ -1,42 +1,39 @@
 #pragma once 
-#include "entity.hpp"
 #include <raylib.hpp>
 
 
-class Zombie : public Entity
+class Zombie
 {
 public:
-    Zombie(Vector2 position_, float speed_, Vector2 size_);
+    Zombie(const Vector2& position);
 
-    // Update
-    void SetupPotentialMovement(Rectangle playerRectangle_);
+    // === Accessors ===
+    Vector2 GetPosition() const;
+    Vector2 GetPositionInViewSpace() const;
+    Vector2 GetPotentialMovement() const;
+    Rectangle GetRectangle() const;
+    Vector2 GetSpeed() const;
 
-    // Move
-    void SetPosition(Vector2 position_);
-    void UpdateX();
-    void UpdateY();
+    // === Setters ===
+    void SetPosition(const Vector2& newPosition);
+    void SetPositionInViewSpace(const Vector2& newPositionInViewSpace);
 
-    // Collisions
-    void ResetPositionX();
-    void ResetPositionY();
+    // === Movemement & Logic ===
+    void CalculateNextMove(const Rectangle& playerRectangle);
+    void UpdateHorizontalPosition();
+    void UpdateVerticalPosition();
 
-    // Informations
-    Vector2 GetPosition();
-    Vector2 GetPotentialMovement();
-    Rectangle GetRectangle();
-    float GetSpeed();
-    Vector2 GetPositionInViewSpace();
+    // === Collision Handling ===
+    void RevertHorizontalPosition();
+    void RevertVerticalPosition();
 
-    // Rendering
-    void Draw() const override;
-    void SetPositionInViewSpace(const Vector2& position_);
-
+    // === Rendering ===
+    void Render() const;
 
 private:
-    Vector2 position;
-    Vector2 potentialMovement;
-    float speed;
-    Vector2 size;
-    Color bg;
-    Vector2 positionInViewSpace;
+    Vector2 _position;
+    Vector2 _positionInViewSpace;
+    Vector2 _potentialMovement;
+    Vector2 _speed;
+    Vector2 _size;
 };

@@ -7,13 +7,12 @@ class GameCamera
 public:
     GameCamera();
 
-    // Update
-    void SetPosition(Vector2 position_);
-
-    // Informations
+    // === Accessors ===
     Vector2 GetPosition();
 
+    // === Setters ===
+    void SetPosition(const Vector2& newPosition);
 
 private:
-    Vector2 position;
+    Vector2 _position;
 };

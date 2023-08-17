@@ -1,22 +1,27 @@
 #pragma once 
-#include "entity.hpp"
 #include <raylib.hpp>
 #include <array>
 
 
-class Wall : public Entity
+class Wall
 {
 public:
-    Wall(std::array<int, 2> gridPosition_);
-    void Draw() const override;
+    Wall(const Vector2& position);
 
-    Rectangle GetRectangle();
-    Vector2 GetPositionInViewSpace();
-    Vector2 GetPosition();
-    void SetPositionInViewSpace(const Vector2& position_);
+    // === Accessors ===
+    Vector2 GetPosition() const;
+    Vector2 GetPositionInViewSpace() const;
+    Rectangle GetRectangle() const;
+
+    // === Setters ===
+    void SetPosition(const Vector2& newPosition);
+    void SetPositionInViewSpace(const Vector2& newPositionInViewSpace);
+
+    // === Rendering ===
+    void Render() const;
 
 private:
-    Vector2 position;
-    Color bg;
-    Vector2 positionInViewSpace;
+    Vector2 _position;
+    Vector2 _positionInViewSpace;
+    Vector2 _size;
 };

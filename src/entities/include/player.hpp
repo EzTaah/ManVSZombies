@@ -1,41 +1,40 @@
 #pragma once 
-#include "entity.hpp"
 #include <raylib.hpp>
 
 
-class Player : public Entity
+class Player
 {
 public:
-    Player();
+    Player(const Vector2& position);
 
-    // Move
-    void SetPosition(Vector2 position_);
-    void SetPotentialMovement(Vector2 movement_);
-    void UpdateX();
-    void UpdateY();
+    // === Accessors ===
+    Vector2 GetPosition() const;
+    Vector2 GetPositionInViewSpace() const;
+    Vector2 GetPotentialMovement() const;
+    Rectangle GetRectangle() const;
+    Rectangle GetRectangleInViewSpace() const;
+    Vector2 GetSpeed() const;
 
-    // Collisions
-    void ResetPositionX();
-    void ResetPositionY();
+    // === Setters ===
+    void SetPosition(const Vector2& newPosition);
+    void SetPositionInViewSpace(const Vector2& newPositionInViewSpace);
+    void SetPotentialMovement(const Vector2& movement);
 
-    // Informations
-    Vector2 GetPosition();
-    Vector2 GetPotentialMovement();
-    Rectangle GetRectangle();
-    Rectangle GetRectangleInViewSpace();
-    float GetSpeed();
-    Vector2 GetPositionInViewSpace();
+    // === Movemement & Logic ===
+    void UpdateHorizontalPosition();
+    void UpdateVerticalPosition();
 
-    // Rendering
-    void Draw() const override;
-    void SetPositionInViewSpace(const Vector2& position_);
+    // === Collision Handling ===
+    void RevertHorizontalPosition();
+    void RevertVerticalPosition();
 
+    // === Rendering ===
+    void Render() const;
 
 private:
-    Vector2 position;
-    Vector2 potentialMovement;
-    float speed;
-    Vector2 size;
-    Color bg;
-    Vector2 positionInViewSpace;
+    Vector2 _position;
+    Vector2 _positionInViewSpace;
+    Vector2 _potentialMovement;
+    Vector2 _speed;
+    Vector2 _size;
 };
