@@ -1,9 +1,27 @@
+# ManVsZombie
 
-# Compilation Instructions ( using MinGW Compiler )
+A 2D shooter game developed using the [Raylib](https://www.raylib.com/) library.
 
-1. Navigate to the build directory:
+
+## Features
+- /
+
+### Keys
+- Use `Z` `Q` `S` `D` to move the player.
+- Aim with the mouse and click the left button to shoot.
+
+---
+
+## Building and Development
+
+### Informations
+- /
+
+### Compilation instructions ( if you are using the minGW compiler)
+
+1. Navigate to the build directory : 
 ```
-cd build
+cd build 
 ```
 
 2. Generate the makefiles:
@@ -11,15 +29,12 @@ cd build
 cmake -G "MinGW Makefiles" ..
 ```
 
-3. Compile the project:
+3. Compile the project :   
+``` 
+mingw32-make 
 ```
-mingw32-make
-```
 
-# Running the Game
-
-Execute the following command:
-
+4. Run the game :   
 ```
 .\debug.exe
 ```
