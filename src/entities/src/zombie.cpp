@@ -3,11 +3,7 @@
 
 
 Zombie::Zombie(const Vector2& position)
-    : _position(position),
-      _positionInViewSpace(position),
-      _potentialMovement({0.0f, 0.0f}),
-      _speed({200.0f, 200.0f}),
-      _size({30.0f, 30.0f})
+    : MovingEntity(position, {30.0f, 30.0f})     // {30.0f, 30.0f} is the size of the zombie
 {}
 
 
@@ -15,72 +11,27 @@ Zombie::Zombie(const Vector2& position)
 Vector2 DescisionMaking(const Rectangle& playerRectangle, const Rectangle& zombieRectangle);
 
 
-// === Accessors ===
-Vector2 Zombie::GetPosition() const {
-    return _position;
-}
+// === Logic ===
+void Zombie::CalculateNextMove() {}
 
-Vector2 Zombie::GetPositionInViewSpace() const {
-    return _positionInViewSpace;
-}
-
-Vector2 Zombie::GetPotentialMovement() const {
-    return _potentialMovement;
-}
-
-Rectangle Zombie::GetRectangle() const {
-    return {_position.x, _position.y, _size.x, _size.y};
-}
-
-Vector2 Zombie::GetSpeed() const {
-    return _speed;
-}
-
-
-// === Setters ===
-void Zombie::SetPosition(const Vector2& newPosition) {
-    _position = newPosition;
-}
-
-void Zombie::SetPositionInViewSpace(const Vector2& newPositionInViewSpace) {
-    _positionInViewSpace = newPositionInViewSpace;
-}
-
-
-// === Movemement & Logic ===
-void Zombie::CalculateNextMove(const Rectangle& playerRectangle)
+void Zombie::CalculateNextMove(const Rectangle& playerRectangle_)
 {
     // Find the direction the zombie needs to go to reach the player
-    Vector2 direction = DescisionMaking(playerRectangle, GetRectangle());
+    Vector2 direction = DescisionMaking(playerRectangle_, GetRectangle());
 
     // Calculate the delpacement the zombie will do
     _potentialMovement.x = direction.x * _speed.x;
     _potentialMovement.y = direction.y * _speed.y;
 }
 
-void Zombie::UpdateHorizontalPosition() {
-    _position.x += _potentialMovement.x * GetFrameTime();
-}
 
-void Zombie::UpdateVerticalPosition() {
-    _position.y += _potentialMovement.y * GetFrameTime();
-}
-
-
-// === Collision Handling ===
-void Zombie::RevertHorizontalPosition() {
-    _position.x -= _potentialMovement.x * GetFrameTime();
-}
-
-void Zombie::RevertVerticalPosition() {
-    _position.y -= _potentialMovement.y * GetFrameTime();
-}
-
-
-// === Rendering ===
+// === Render ===
 void Zombie::Render() const {
     DrawRectangle(_positionInViewSpace.x, _positionInViewSpace.y, _size.x, _size.y, RED);
 }
+
+
+
 
 
 // ==================

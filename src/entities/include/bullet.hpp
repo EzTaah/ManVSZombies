@@ -1,32 +1,26 @@
 #pragma once
+#include "moving_entity.hpp"
 #include <raylib.hpp>
 
 
-class Bullet
+class Bullet : public MovingEntity
 {
 public:
     Bullet(const Vector2& position, const Vector2& speed);
 
     // === Accessors ===
-    Vector2 GetPosition() const;
-    Vector2 GetPositionInViewSpace() const;
-    Rectangle GetRectangle() const;
+    bool IsActive() const;
 
     // === Setters ===
-    void SetPositionInViewSpace(const Vector2& position);
+    void Activate();
+    void Desactivate();
 
-    // === Movemement & Logic ===
-    void CalculateNextMove();
-    void UpdateHorizontalPosition();
-    void UpdateVerticalPosition();
+    // === Logic ===
+    void CalculateNextMove() override;
 
     // === Rendering ===
-    void Render() const;
+    void Render() const override;
 
 private:
-    Vector2 _position;
-    Vector2 _positionInViewSpace;
-    Vector2 _potentialMovement;
-    Vector2 _speed;
-    Vector2 _size;
+    bool _isActive;
 };
