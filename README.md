@@ -1,10 +1,12 @@
 # ManVsZombie
 
-A 2D shooter game developed using the [Raylib](https://www.raylib.com/) library.
-
+A 2D top-down game where a player character can move, wield a weapon, and eliminate zombies.   
+The game is currently under development.
 
 ## Features
-- /
+- 2D top-down view 
+- Collision detection
+- Zombie adversaries
 
 ### Keys
 - Use `Z` `Q` `S` `D` to move the player.
@@ -15,7 +17,7 @@ A 2D shooter game developed using the [Raylib](https://www.raylib.com/) library.
 ## Building and Development
 
 ### Informations
-- /
+> Game developed using the [Raylib](https://www.raylib.com/) library.
 
 ### Compilation instructions ( if you are using the minGW compiler)
 
