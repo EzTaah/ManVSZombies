@@ -5,7 +5,7 @@ Player::Player(const Vector2& position)
     : _position(position),
       _positionInViewSpace(position),
       _potentialMovement({0.0f, 0.0f}),
-      _speed({0.0f, 0.0f}),
+      _speed({400.0f, 400.0f}),
       _size({30.0f, 30.0f})
 {}
 

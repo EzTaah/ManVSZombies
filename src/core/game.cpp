@@ -8,14 +8,15 @@
 
 ///////////////// PUBLIC /////////////////
 Game::Game() 
-    : _lastUpdateTimeEvent1(0.0f),
-      _gridManager(),
-      _player({400.0f, 600.0f}),
+    : _gridManager(),
+      _player({500.0f, 600.0f}),
       _bulletManager(),
       _zombieManager(),
       _wallManager(_gridManager.GetGrid()),     // Init all the walls
       _collisionManager(),
-      _renderer(_player.GetRectangle())     // Setup camera
+      _renderer(_player.GetRectangle()),     // Setup camera
+      _lastUpdateTimeEvent1(0.0),
+      _lastUpdateTimeEvent2(0.0)
 {}
 
 void Game::Update() {
@@ -37,265 +38,205 @@ void Game::Render()
 }
 
 
-
-/// PRIVATE  /////////////////
-void Game::HandleInputs()
+///////////////// PRIVATE /////////////////
+void Game::_HandleInputs()
 {
     // Mouse management
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
-    {
-        if (EventTriggered(0.5, lastUpdateTimeEvent1)) 
-            bulletManager.ShootNewBullet(player.GetRectangle(), player.GetRectangleInViewSpace());
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+        if (EventTriggered(0.1, _lastUpdateTimeEvent1)) 
+            _bulletManager.ShootNewBullet(_player.GetRectangle(), _player.GetRectangleInViewSpace());
     }
 
     // Keys management
     Vector2 playerPotentialMovement{0.0f, 0.0f};
-
     if(IsKeyDown(KEY_W)) 
-        playerPotentialMovement.y -= player.GetSpeed();
+        playerPotentialMovement.y -= _player.GetSpeed().y;
     if(IsKeyDown(KEY_S))
-        playerPotentialMovement.y += player.GetSpeed(); 
+        playerPotentialMovement.y += _player.GetSpeed().y; 
     if(IsKeyDown(KEY_A))
-        playerPotentialMovement.x -= player.GetSpeed(); 
+        playerPotentialMovement.x -= _player.GetSpeed().x; 
     if(IsKeyDown(KEY_D))
-        playerPotentialMovement.x += player.GetSpeed(); 
-
-    player.SetPotentialMovement(playerPotentialMovement);
+        playerPotentialMovement.x += _player.GetSpeed().x; 
+    _player.SetPotentialMovement(playerPotentialMovement);
 }
 
-
-void Game::SetPotentialMovementEntities()
+void Game::_CalculateNextMoveEntities()
 {
     // Spawn new zombies if needed
-    if (EventTriggered(4, lastUpdateTimeEvent1)) 
-        zombieManager.SpawnNewZombie(gridManager.GetGridDimensions());
+    if (EventTriggered(0.5, _lastUpdateTimeEvent2)) 
+        _zombieManager.SpawnNewZombie(_gridManager.GetGrid(), _gridManager.GetNumberOfTiles());
 
-    zombieManager.SetupPotentialMovement(player.GetRectangle());
-
-    bulletManager.SetupPotentialMovement();
+    // Calculate and setup the nextMove for all zombies and bullets
+    _zombieManager.CalculateNextMoveZombies(_player.GetRectangle());
+    _bulletManager.CalculateNextMoveBullets();
 }
 
-void Game::UpdateEntitiesX()
+void Game::_UpdateHorizontalPositionEntities()
 {
-    player.UpdateX();
-    zombieManager.UpdateX();
-    bulletManager.UpdateX();
+    _player.UpdateHorizontalPosition();
+    _zombieManager.UpdateHorizontalPositionZombies();
+    _bulletManager.UpdateHorizontalPositionBullets();
 }
 
-
-void Game::UpdateEntitiesY()
+void Game::_UpdateVerticalPositionEntities()
 {
-    player.UpdateY();
-    zombieManager.UpdateY();
-    bulletManager.UpdateY();
+    _player.UpdateVerticalPosition();
+    _zombieManager.UpdateVerticalPositionZombies();
+    _bulletManager.UpdateVerticalPositionBullets();
 }
 
-
-
-void Game::HandleCollisions(char mode_)
+void Game::_HandleCollisions(char mode)
 {
-    // Check for boundary collision
-    if(collisionManager.IsOutsideBoundaryX(player.GetRectangle())) 
-        player.ResetPositionX();
-    if(collisionManager.IsOutsideBoundaryY(player.GetRectangle())) 
-        player.ResetPositionY();
+    // === Check for player-boundary collision ===
+    if(_collisionManager.IsOutsideBoundaryX(_player.GetRectangle(), _gridManager.GetGridDimensions().x)) 
+        _player.RevertHorizontalPosition();
+    if(_collisionManager.IsOutsideBoundaryY(_player.GetRectangle(), _gridManager.GetGridDimensions().y))
+        _player.RevertVerticalPosition();
 
-    
-    // Check for player-zombie collision
-    for(unsigned int i{0} ; i < zombieManager.GetZombiesArray().size() ; ++i)
+    // === Check for bullet-boundary collision ===
+    for(unsigned int i{0} ; i < _bulletManager.GetBulletsArray().size() ; ++i)
     {
-        if(CheckCollisionRecs(player.GetRectangle(), zombieManager.GetZombiesArray()[i].GetRectangle()))
-        {
-            if(mode_ == 'x')
-            {
-                player.ResetPositionX();
-                zombieManager.GetZombiesArray()[i].ResetPositionX();
-            }
-            else
-            {
-                player.ResetPositionY();
-                zombieManager.GetZombiesArray()[i].ResetPositionY(); 
-            }
+        bool isOutsideBoundaryX = _collisionManager.IsOutsideBoundaryX(_bulletManager.GetBulletsArray()[i].GetRectangle(), _gridManager.GetGridDimensions().x);
+        bool isOutsideBoundaryY = _collisionManager.IsOutsideBoundaryY(_bulletManager.GetBulletsArray()[i].GetRectangle(), _gridManager.GetGridDimensions().y);
+        if(isOutsideBoundaryX || isOutsideBoundaryY) 
+            _bulletManager.RemoveBullet(i);
+    }
 
+    // === Check for player-zombie collision ===
+    for(unsigned int i{0} ; i < _zombieManager.GetZombiesArray().size() ; ++i)
+    {
+        Zombie& zombie = _zombieManager.GetZombiesArray()[i];
+        if(CheckCollisionRecs(_player.GetRectangle(), zombie.GetRectangle()))
+        {
+            if(mode == 'x') {
+                _player.RevertHorizontalPosition();
+                _zombieManager.RevertHorizontalPositionZombie(i);
+            }
+            else {
+                _player.RevertVerticalPosition();
+                _zombieManager.RevertVerticalPositionZombie(i); 
+            }
         }
     }
 
-    // Check for zombie-zombie collision
-    for(unsigned int i{0} ; i < zombieManager.GetZombiesArray().size() ; ++i) {
-        Zombie& zombie1 = zombieManager.GetZombiesArray()[i];
+    // === Check for zombie-zombie collision ===
+    for(unsigned int i{0} ; i < _zombieManager.GetZombiesArray().size() ; ++i) {
+        Zombie& zombie1 = _zombieManager.GetZombiesArray()[i];
 
-        for(unsigned int k{i+1} ; k < zombieManager.GetZombiesArray().size() ; ++k) {
-            Zombie& zombie2 = zombieManager.GetZombiesArray()[k];
+        for(unsigned int k{i+1} ; k < _zombieManager.GetZombiesArray().size() ; ++k) {
+            Zombie& zombie2 = _zombieManager.GetZombiesArray()[k];
 
             if(CheckCollisionRecs(zombie1.GetRectangle(), zombie2.GetRectangle()))
             {
-                if(mode_ == 'x')
+                if(mode == 'x')
                 {
-                    if (zombie1.GetPotentialMovement().x * zombie2.GetPotentialMovement().x <= 0)
-                    {   
-                        // Si les 2 zombies vont dans des directions oppposées
-                        zombie1.ResetPositionX();
-                        zombie2.ResetPositionX();
+                    if (zombie1.GetPotentialMovement().x * zombie2.GetPotentialMovement().x <= 0) {   // If the zombies go in opposite directions
+                        _zombieManager.RevertHorizontalPositionZombie(i);
+                        _zombieManager.RevertHorizontalPositionZombie(k);
                     }
-                    else 
+                    else    // The zombies go in the same direction, but there is a collision
                     {
-                        // Calculate which zombie is behind
-
-                        // case where only zombie2 has moved
-                        float oldZombie1PositionX{zombie1.GetPosition().x - zombie1.GetPotentialMovement().x};  
-
+                        // === Calculate which zombie is behind ===
+                        float oldZombie1PositionX{zombie1.GetPosition().x - zombie1.GetPotentialMovement().x}; // Simulate case where only zombie2 has moved
                         Rectangle oldZombie1Rectangle = {oldZombie1PositionX, zombie1.GetRectangle().y, zombie1.GetRectangle().width, zombie1.GetRectangle().width};
 
-                        if(CheckCollisionRecs(oldZombie1Rectangle, zombie2.GetRectangle()))
-                        {
-                            // Zombie2 is behind
-                            zombie2.ResetPositionX();
-                        }
-                        else
-                        {
-                            // zombie1 is behing
-                            zombie1.ResetPositionX();
-                        }
+                        if(CheckCollisionRecs(oldZombie1Rectangle, zombie2.GetRectangle()))     // If it is true, the zombie2 is behind
+                            _zombieManager.RevertHorizontalPositionZombie(k);    // As a result, only the zombie 2 will revert his position
+                        else    // In this case, the zombie 1 is behind
+                            _zombieManager.RevertHorizontalPositionZombie(i);     // As a result, only the zombie 1 will revert his position
                     }
                 }
                 else
                 {
-                    if (zombie1.GetPotentialMovement().y * zombie2.GetPotentialMovement().y <= 0)
-                    {   
-                        // Si les 2 zombies vont dans des directions oppposées
-                        zombie1.ResetPositionY();
-                        zombie2.ResetPositionY();
-
-                        // Est il en collision mtn ?
-
+                    if (zombie1.GetPotentialMovement().y * zombie2.GetPotentialMovement().y <= 0) { // If the zombies go in opposite directions  
+                        _zombieManager.RevertVerticalPositionZombie(i);
+                        _zombieManager.RevertVerticalPositionZombie(k);
                     }
-                    else 
+                    else    // The zombies go in the same direction, but there is a collision
                     {
-                        // Calculate which zombie is behind
-
-                        // case where only zombie2 has moved
-                        float oldZombie1PositionY{zombie1.GetPosition().y - zombie1.GetPotentialMovement().y};  
+                        // === Calculate which zombie is behind ===
+                        float oldZombie1PositionY{zombie1.GetPosition().y - zombie1.GetPotentialMovement().y};  // Simulate case where only zombie2 has moved
                         Rectangle oldZombie1Rectangle = {zombie1.GetRectangle().x, oldZombie1PositionY, zombie1.GetRectangle().width, zombie1.GetRectangle().width};
-                        if(CheckCollisionRecs(oldZombie1Rectangle, zombie2.GetRectangle()))
-                        {
-                            // Zombie2 is behind
-                            zombie2.ResetPositionY();
-                        }
-                        else
-                        {
-                            // zombie1 is behing
-                            zombie1.ResetPositionY();
-                        }
+
+                        if(CheckCollisionRecs(oldZombie1Rectangle, zombie2.GetRectangle()))     // If it is true, the zombie2 is behind
+                             _zombieManager.RevertVerticalPositionZombie(k);   // As a result, only the zombie 2 will revert his position
+                        else    // In this case, the zombie 1 is behind
+                             _zombieManager.RevertVerticalPositionZombie(i);   // As a result, only the zombie 1 will revert his position
                     }
                 }
             }
         }
     }
 
+    // === Check for zombie-wall collsions ===
+    for(unsigned int i{0} ; i < _zombieManager.GetZombiesArray().size() ; ++i) {
+        Zombie& zombie = _zombieManager.GetZombiesArray()[i];
 
-    // Check for zombie-wall collsions
+        for(unsigned int n{0} ; n < _wallManager.GetWallsArray().size() ; ++n) {
+            Wall& wall = _wallManager.GetWallsArray()[n];
 
-    for(unsigned int i{0} ; i < zombieManager.GetZombiesArray().size() ; ++i)
-    {
-        for(unsigned int n{0} ; n < wallManager.GetWallsArray().size() ; ++n)
-        {
-            if(collisionManager.AreColliding(zombieManager.GetZombiesArray()[i].GetRectangle(), wallManager.GetWallsArray()[n].GetRectangle()))
+            if(_collisionManager.AreColliding(zombie.GetRectangle(), wall.GetRectangle()))
             {
-                if(mode_ == 'x')
-                {
-                    zombieManager.GetZombiesArray()[i].ResetPositionX();
+                if(mode == 'x') {
+                     _zombieManager.RevertHorizontalPositionZombie(i);
                 }
                 else
-                {
-                    zombieManager.GetZombiesArray()[i].ResetPositionY();
-                }
+                     _zombieManager.RevertVerticalPositionZombie(i);
+                break;  // Prevent the case where zombie is colliding with several walls
             }
         }
     }
 
-
-    // Check for player-wall collisions
-    for(unsigned int i{0} ; i < wallManager.GetWallsArray().size() ; ++i)
+    // === Check for player-wall collisions ===
+    for(unsigned int i{0} ; i < _wallManager.GetWallsArray().size() ; ++i)
     {
-        if(CheckCollisionRecs(player.GetRectangle(), wallManager.GetWallsArray()[i].GetRectangle()))
+        Wall& wall = _wallManager.GetWallsArray()[i];
+        if(CheckCollisionRecs(_player.GetRectangle(), wall.GetRectangle()))
         {
-            if(mode_ == 'x')
-            {
-                player.ResetPositionX();
-            }
+            if(mode == 'x')
+                _player.RevertHorizontalPosition();
             else
-            {
-                player.ResetPositionY();
-            }
-
+                _player.RevertVerticalPosition();
         }
     }
 
-
-    // Check bullet-wall collisions
+    // === Check bullet-wall collisions ===
     std::vector<int> bulletsToRemove;
+    for(unsigned int i{0} ; i < _bulletManager.GetBulletsArray().size() ; ++i) {
+        Bullet& bullet = _bulletManager.GetBulletsArray()[i];
 
-    for(unsigned int i{0} ; i < bulletManager.GetBulletsArray().size() ; ++i)
-    {
-        for(unsigned int n{0} ; n < wallManager.GetWallsArray().size() ; ++n)
-        {
-            if(collisionManager.AreColliding(bulletManager.GetBulletsArray()[i].GetRectangle(), wallManager.GetWallsArray()[n].GetRectangle()))
-            {
+        for(unsigned int n{0} ; n < _wallManager.GetWallsArray().size() ; ++n) {
+            Wall& wall = _wallManager.GetWallsArray()[n];
+
+            if(_collisionManager.AreColliding(bullet.GetRectangle(), wall.GetRectangle()))
                 bulletsToRemove.push_back(i);   // The bullet will be removed
-            }
         }
     }
-    // Surpprime les doublons
-    bulletsToRemove.erase(std::unique(bulletsToRemove.begin(), bulletsToRemove.end()), bulletsToRemove.end());
+    bulletsToRemove.erase(std::unique(bulletsToRemove.begin(), bulletsToRemove.end()), bulletsToRemove.end());      // Removes duplicates
+    for(signed int i{bulletsToRemove.size()-1} ; i >= 0 ; --i)      // Remove bullet
+        _bulletManager.RemoveBullet(bulletsToRemove[i]);
 
-    // Remove bullet
-    for(signed int i{bulletsToRemove.size()-1} ; i >= 0 ; --i)
-        bulletManager.RemoveBullet(bulletsToRemove[i]);
-
-
-
-    //Check for bullet-zombie collision
+    // === Check for bullet-zombie collision ===
     bulletsToRemove.clear();
     std::vector<int> zombiesToRemove;
 
-    for(unsigned int i{0} ; i < bulletManager.GetBulletsArray().size() ; ++i)
-    {
-        for(unsigned int n{0} ; n < zombieManager.GetZombiesArray().size() ; ++n)
-        {
-            if(collisionManager.AreColliding(bulletManager.GetBulletsArray()[i].GetRectangle(), zombieManager.GetZombiesArray()[n].GetRectangle()))
+    for(unsigned int i{0} ; i < _bulletManager.GetBulletsArray().size() ; ++i) {
+        Bullet& bullet = _bulletManager.GetBulletsArray()[i];
+
+        for(unsigned int n{0} ; n < _zombieManager.GetZombiesArray().size() ; ++n) {
+            Zombie& zombie = _zombieManager.GetZombiesArray()[n];
+
+            if(_collisionManager.AreColliding(bullet.GetRectangle(), zombie.GetRectangle()))
             {
                 bulletsToRemove.push_back(i);   // The bullet will be removed
                 zombiesToRemove.push_back(n);   // The zombie will be killed
             }
         }
     }
-    // Surpprime les doublons
-    bulletsToRemove.erase(std::unique(bulletsToRemove.begin(), bulletsToRemove.end()), bulletsToRemove.end());
-    zombiesToRemove.erase(std::unique(zombiesToRemove.begin(), zombiesToRemove.end()), zombiesToRemove.end());
-
-    // Remove bullet
-    for(signed int i{bulletsToRemove.size()-1} ; i >= 0 ; --i)
-        bulletManager.RemoveBullet(bulletsToRemove[i]);
-
-    // Kill zombie
-    for(signed int n{zombiesToRemove.size()-1} ; n >= 0 ; --n)
-        zombieManager.KillZombie(zombiesToRemove[n]);
-
-
-
-    // Check for bullets boundary collision
-    for(unsigned int i{0} ; i < bulletManager.GetBulletsArray().size() ; ++i)
-    {
-        bool isOutsideBoundaryY = collisionManager.IsOutsideBoundaryY(bulletManager.GetBulletsArray()[i].GetRectangle());
-        bool isOutsideBoundaryX = collisionManager.IsOutsideBoundaryX(bulletManager.GetBulletsArray()[i].GetRectangle());
-        if(isOutsideBoundaryX || isOutsideBoundaryY) 
-            bulletManager.RemoveBullet(i);
-    }
+    bulletsToRemove.erase(std::unique(bulletsToRemove.begin(), bulletsToRemove.end()), bulletsToRemove.end());  // Removes duplicates
+    zombiesToRemove.erase(std::unique(zombiesToRemove.begin(), zombiesToRemove.end()), zombiesToRemove.end());  // Removes duplicates
+    for(signed int i{bulletsToRemove.size()-1} ; i >= 0 ; --i)  // Removes bullets
+        _bulletManager.RemoveBullet(bulletsToRemove[i]);
+    for(signed int n{zombiesToRemove.size()-1} ; n >= 0 ; --n)  // Removes zombies
+        _zombieManager.RemoveZombie(zombiesToRemove[n]);
 }
-
-
-
-
-
-
-

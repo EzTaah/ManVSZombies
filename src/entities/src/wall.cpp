@@ -30,3 +30,9 @@ void Wall::SetPosition(const Vector2& newPosition) {
 void Wall::SetPositionInViewSpace(const Vector2& newPositionInViewSpace) {
     _positionInViewSpace = newPositionInViewSpace;
 }
+
+
+// === Rendering ===
+void Wall::Render() const {
+    DrawRectangle(_positionInViewSpace.x, _positionInViewSpace.y, _size.x, _size.y, BLACK);
+}

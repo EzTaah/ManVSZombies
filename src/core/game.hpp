@@ -23,6 +23,7 @@ private:
     void _HandleCollisions(char mode); 
 
     double _lastUpdateTimeEvent1;
+    double _lastUpdateTimeEvent2;
 
     GridManager _gridManager;
     Player _player;

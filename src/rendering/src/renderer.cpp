@@ -74,16 +74,16 @@ void Renderer::Render(const GridManager& gridManager, const Player& player, cons
     player.Render();
 
     // Render bullets
-    for (const Bullet& elt : bulletManager.GetBulletsArray())
-        elt.Render();
+    for (Bullet& bullet : bulletManager.GetBulletsArray())
+        bullet.Render();
 
     // Render zombies
-    for (const Zombie& elt : zombieManager.GetZombiesArray())
-        elt.Render();
+    for (Zombie& zombie : zombieManager.GetZombiesArray())
+        zombie.Render();
 
     // Render walls
-    for (const Wall& elt : wallManager.GetWallsArray())
-        elt.Render();
+    for (Wall& wall : wallManager.GetWallsArray())
+        wall.Render();
 
     EndDrawing();
 }

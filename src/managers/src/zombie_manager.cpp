@@ -28,31 +28,41 @@ std::vector<Rectangle> ZombieManager::GetZombiesRectangle() const
 
 
 // === Mutators ===
-void ZombieManager::SpawnNewZombie(const Vector2& gridDimention)
+void ZombieManager::SpawnNewZombie(const std::vector<std::vector<int>>& grid, const Vector2& numberOfTilesGrid)
 {
-    Vector2 spawnLocation;
+    Vector2 spawnLocationTile;
     // which side
     switch (myUtils::GetRandomNumber(0, 3))     // Choose a random side of the screen
     {
-        case 0:
-            spawnLocation.x = -30;
-            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention.y);   // Choose a random position on this side
+        case 0:     
+            spawnLocationTile.x = 0;    // Spawn on the left
+            do {
+                spawnLocationTile.y = myUtils::GetRandomNumber(0, numberOfTilesGrid.y - 1); 
+            } while (grid[spawnLocationTile.y][spawnLocationTile.x] == 1);   // Repeat until the location is available
             break;
+
         case 1:
-            spawnLocation.x = gridDimention.x;
-            spawnLocation.y = myUtils::GetRandomNumber(0, gridDimention.y);
+            spawnLocationTile.x = numberOfTilesGrid.x - 1;    // Spawn on the right
+            do {
+                spawnLocationTile.y = myUtils::GetRandomNumber(0, numberOfTilesGrid.y - 1); 
+            } while (grid[spawnLocationTile.y][spawnLocationTile.x] == 1);   // Repeat until the location is available
             break;
-        case 2:
-            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention.x);
-            spawnLocation.y = -30;
-            break;
-        case 3:
-            spawnLocation.x = myUtils::GetRandomNumber(0, gridDimention.x);
-            spawnLocation.y = gridDimention.y;
+
+        case 2:     
+            spawnLocationTile.y = 0;    // Spawn on the top
+            do {
+                spawnLocationTile.x = myUtils::GetRandomNumber(0, numberOfTilesGrid.x - 1); 
+            } while (grid[spawnLocationTile.y][spawnLocationTile.x] == 1);   // Repeat until the location is available
+            break;    
+
+        case 3:     
+            spawnLocationTile.y = numberOfTilesGrid.y - 1;      // Spawn on the bottom
+            do {
+                spawnLocationTile.x = myUtils::GetRandomNumber(0, numberOfTilesGrid.x - 1); 
+            } while (grid[spawnLocationTile.y][spawnLocationTile.x] == 1);   // Repeat until the location is available
             break;
     }
-
-    _zombiesArray.push_back(Zombie(spawnLocation));
+    _zombiesArray.push_back(Zombie({30.0f * spawnLocationTile.x, 30.0f * spawnLocationTile.y}));
 }
 
 void ZombieManager::RemoveZombie(int index) {
@@ -88,4 +98,14 @@ void ZombieManager::UpdateVerticalPositionZombies()
 {
     for (Zombie& zombie : _zombiesArray)
         zombie.UpdateVerticalPosition();
+}
+
+
+// === Collision Handling ===
+void ZombieManager::RevertHorizontalPositionZombie(int index) {
+    _zombiesArray[index].RevertHorizontalPosition();
+}
+
+void ZombieManager::RevertVerticalPositionZombie(int index) {
+    _zombiesArray[index].RevertVerticalPosition();
 }

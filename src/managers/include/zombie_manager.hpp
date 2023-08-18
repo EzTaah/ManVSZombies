@@ -14,7 +14,7 @@ public:
     std::vector<Rectangle> GetZombiesRectangle() const;
 
     // === Mutators ===
-    void SpawnNewZombie(const Vector2& gridDimention);
+    void SpawnNewZombie(const std::vector<std::vector<int>>& grid, const Vector2& numberOfTilesGrid);
     void RemoveZombie(int index);
     void SetPositionInViewSpaceZombies(const Vector2& cameraPosition);
 
@@ -22,6 +22,10 @@ public:
     void CalculateNextMoveZombies(const Rectangle& playerRectangle);
     void UpdateHorizontalPositionZombies();
     void UpdateVerticalPositionZombies();
+
+    // === Collision Handling ===
+    void RevertHorizontalPositionZombie(int index);
+    void RevertVerticalPositionZombie(int index);
 
 private:
     std::vector<Zombie> _zombiesArray;

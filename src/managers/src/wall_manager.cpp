@@ -12,7 +12,7 @@ WallManager::WallManager(const std::vector<std::vector<int>>& grid)
         {
             if(grid[i][n] == 1)
             {
-                Vector2 wallPosition = {30.0f * i, 30.0f * n};
+                Vector2 wallPosition = {30.0f * n, 30.0f * i};
                 _wallsArray.push_back(Wall(wallPosition));
             }
         }

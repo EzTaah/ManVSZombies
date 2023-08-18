@@ -42,8 +42,6 @@ set(SOURCE_FILES
     src/managers/src/collision_manager.cpp
     src/managers/include/grid_manager.hpp
     src/managers/src/grid_manager.cpp
-    src/managers/include/input_manager.hpp
-    src/managers/src/input_manager.cpp
     src/managers/include/wall_manager.hpp
     src/managers/src/wall_manager.cpp
     src/managers/include/zombie_manager.hpp

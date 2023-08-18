@@ -6,7 +6,7 @@ Zombie::Zombie(const Vector2& position)
     : _position(position),
       _positionInViewSpace(position),
       _potentialMovement({0.0f, 0.0f}),
-      _speed({0.0f, 0.0f}),
+      _speed({200.0f, 200.0f}),
       _size({30.0f, 30.0f})
 {}
 

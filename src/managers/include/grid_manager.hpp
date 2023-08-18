@@ -11,6 +11,7 @@ public:
     // === Accessors ===
     std::vector<std::vector<int>> GetGrid() const;
     Vector2 GetGridDimensions() const;
+    Vector2 GetNumberOfTiles() const;
     Vector2 GetPositionInViewSpace() const;
 
     // === Mutators ===
