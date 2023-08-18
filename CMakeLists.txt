@@ -64,5 +64,8 @@ add_executable(debug ${SOURCE_FILES})     # <- this is the target
 # Link to all the needed library
 target_link_libraries(debug raylib opengl32 gdi32 winmm)
 
-# compiler linker flags 
-target_compile_options(debug PRIVATE -Wall -Wextra)
+# compiler compiler flags 
+target_compile_options(debug PRIVATE -Wall -Wextra -mwindows)
+
+#compiler linker flags
+set_target_properties(debug PROPERTIES LINK_FLAGS "-mwindows")
