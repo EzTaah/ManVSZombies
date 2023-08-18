@@ -2,6 +2,7 @@
 #include "zombie.hpp"
 #include <raylib.hpp>
 #include <vector>
+#include <memory>
 
 
 class ZombieManager
@@ -14,7 +15,7 @@ public:
     std::vector<Rectangle> GetZombiesRectangle() const;
 
     // === Mutators ===
-    void SpawnNewZombie(const std::vector<std::vector<int>>& grid, const Vector2& numberOfTilesGrid);
+    void SpawnNewZombie(const std::vector<std::vector<int>>& grid, const Vector2& numberOfTilesGrid, std::vector<std::unique_ptr<MovingEntity>>& movingEntitiesArray);
     void RemoveZombie(int index);
     void SetPositionInViewSpaceZombies(const Vector2& cameraPosition);
 
@@ -28,6 +29,6 @@ public:
     void RevertVerticalPositionZombie(int index);
 
 private:
-    std::vector<Zombie> _zombiesArray;
+    std::vector<std::unique_ptr<Zombie>&> _zombiesArray;
     double _lastUpdateTimeEvent1;
 };

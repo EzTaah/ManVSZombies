@@ -1,4 +1,6 @@
 #pragma once
+#include "entity.hpp"
+#include "moving_entity.hpp"
 #include "grid_manager.hpp"
 #include "player.hpp"
 #include "bullet_manager.hpp"
@@ -6,6 +8,8 @@
 #include "wall_manager.hpp"
 #include "collision_manager.hpp"
 #include "renderer.hpp"
+
+#include <memory>
 
 
 class Game
@@ -17,9 +21,6 @@ public:
 
 private:
     void _HandleInputs();
-    void _CalculateNextMoveEntities();
-    void _UpdateHorizontalPositionEntities();
-    void _UpdateVerticalPositionEntities();
     void _HandleCollisions(char mode); 
 
     double _lastUpdateTimeEvent1;
@@ -32,4 +33,7 @@ private:
     WallManager _wallManager;
     CollisionManager _collisionManager;
     Renderer _renderer; 
+
+    std::vector<std::shared_ptr<Entity>> _entitiesArray;
+    std::vector<std::shared_ptr<MovingEntity>> _movingEntitiesArray;
 };

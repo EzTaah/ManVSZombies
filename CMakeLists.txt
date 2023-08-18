@@ -27,6 +27,10 @@ set(SOURCE_FILES
     src/core/game.hpp
     src/core/game.cpp
 
+    src/entities/include/entity.hpp
+    src/entities/src/entity.cpp
+    src/entities/include/moving_entity.hpp
+    src/entities/src/moving_entity.cpp
     src/entities/include/bullet.hpp
     src/entities/src/bullet.cpp
     src/entities/include/player.hpp

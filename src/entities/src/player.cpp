@@ -2,7 +2,7 @@
 
 
 Player::Player(const Vector2& position)
-    : MovingEntity(position, {30.0f, 30.0f})    // {30.0f, 30.0f} is the size of the player
+    : MovingEntity(position, {400.0f, 400.0f}, {30.0f, 30.0f})    // {400.0f, 400.0f} is the speed of the player, {30.0f, 30.0f} is the size of the player
 {}
 
 

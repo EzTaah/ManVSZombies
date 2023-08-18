@@ -2,10 +2,10 @@
 #include <raylib.hpp>
 
 
-class StaticEntity
+class Entity
 {
 public:
-    StaticEntity(const Vector2& position, const Vector2& size);
+    Entity(const Vector2& position, const Vector2& size);
 
     // === Accessors ===
     Vector2 GetPosition() const;

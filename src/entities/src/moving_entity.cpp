@@ -1,24 +1,14 @@
 #include "moving_entity.hpp"
 
 
-MovingEntity::MovingEntity(const Vector2& position, const Vector2& size)
-    : _position(position),
-      _positionInViewSpace(position),
+MovingEntity::MovingEntity(const Vector2& position, const Vector2& speed, const Vector2& size)
+    : Entity(position, size),
       _potentialMovement({0.0f, 0.0f}),
-      _speed({0.0f, 0.0f}),
-      _size(size)
+      _speed(speed)
 {}
 
 
 // === Accessors ===
-Vector2 MovingEntity::GetPosition() const {
-    return _position;
-}
-
-Vector2 MovingEntity::GetPositionInViewSpace() const {
-    return _positionInViewSpace;
-}
-
 Vector2 MovingEntity::GetPotentialMovement() const {
     return _potentialMovement;
 }
@@ -27,20 +17,8 @@ Vector2 MovingEntity::GetSpeed() const {
     return _speed;
 }
 
-Rectangle MovingEntity::GetRectangle() const {
-    return {_position.x, _position.y, _size.x, _size.y};
-}
-
 
 // === Setters ===
-void MovingEntity::SetPosition(const Vector2& newPosition) {
-    _position = newPosition;
-}
-
-void MovingEntity::SetPositionInViewSpace(const Vector2& newPositionInViewSpace) {
-    _positionInViewSpace = newPositionInViewSpace;
-}
-
 void MovingEntity::SetPotentialMovement(const Vector2& movement) {
     _potentialMovement = movement;
 }

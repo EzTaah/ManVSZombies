@@ -4,6 +4,7 @@
 #include <raylib.hpp>
 #include <cmath>
 #include <vector>
+#include <memory>
 
 
 ZombieManager::ZombieManager()
@@ -28,7 +29,7 @@ std::vector<Rectangle> ZombieManager::GetZombiesRectangle() const
 
 
 // === Mutators ===
-void ZombieManager::SpawnNewZombie(const std::vector<std::vector<int>>& grid, const Vector2& numberOfTilesGrid)
+void ZombieManager::SpawnNewZombie(const std::vector<std::vector<int>>& grid, const Vector2& numberOfTilesGrid, std::vector<std::unique_ptr<MovingEntity>>& movingEntitiesArray)
 {
     Vector2 spawnLocationTile;
     // which side
@@ -62,7 +63,10 @@ void ZombieManager::SpawnNewZombie(const std::vector<std::vector<int>>& grid, co
             } while (grid[spawnLocationTile.y][spawnLocationTile.x] == 1);   // Repeat until the location is available
             break;
     }
-    _zombiesArray.push_back(Zombie({30.0f * spawnLocationTile.x, 30.0f * spawnLocationTile.y}));
+    
+    movingEntitiesArray.push_back(std::make_unique<Zombie>(30.0f * spawnLocationTile.x, 30.0f * spawnLocationTile.y));
+
+    //_zombiesArray.push_back(Zombie({30.0f * spawnLocationTile.x, 30.0f * spawnLocationTile.y}));
 }
 
 void ZombieManager::RemoveZombie(int index) {
