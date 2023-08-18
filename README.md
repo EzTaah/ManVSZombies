@@ -16,10 +16,10 @@ The game is currently under development.
 
 ## Building and Development
 
-### Informations
-> Game developed using the [Raylib](https://www.raylib.com/) library.
+## Informations
+> Game developed using the [Raylib](https://www.raylib.com/) library.<br>
 
-### Compilation instructions ( if you are using the minGW compiler)
+## Compilation instructions ( if you are using the minGW compiler)
 
 1. Navigate to the build directory : 
 ```
