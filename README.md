@@ -1,6 +1,6 @@
 # ManVsZombie
 
-A 2D top-down game where a player character can move, wield a weapon, and eliminate zombies.   
+A 2D top-down game where a player character can move and eliminate zombies.   
 The game is currently under development.
 
 ## Features
