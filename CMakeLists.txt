@@ -64,6 +64,9 @@ add_executable(debug ${SOURCE_FILES})     # <- this is the target
 # Link to all the needed library
 target_link_libraries(debug raylib opengl32 gdi32 winmm)
 
+# add dll files inside the executable
+target_link_options(debug PRIVATE -static -static-libstdc++ -static-libgcc)
+
 # compiler compiler flags 
 target_compile_options(debug PRIVATE -Wall -Wextra -mwindows)
 
