@@ -1,37 +1,37 @@
 # ManVsZombie
+> The game is currently under development.
+A 2D top-down zombie shooter.
 
-A 2D top-down game where a player character can move and eliminate zombies.   
-The game is currently under development.
-
-## Features
-- 2D top-down view 
-- Collision detection
-- Zombie adversaries
-
-### Keys
+### Controls
 - Use `Z` `Q` `S` `D` to move the player.
 - Aim with the mouse and click the left button to shoot.
 
 ---
 
-## Building and Development
+# Building and Development
 
-### Informations
-> Game developed using the [Raylib](https://www.raylib.com/) library.
+## Informations
+- Game developed using the [Raylib](https://www.raylib.com/) library.
 
-### Compilation instructions ( if you are using the minGW compiler)
+## Prerequisites
+- Ensure you have a compiler installed on your computer.
+- There's no need to install Raylib separately. It is already precompiled and stored in the 'lib' folder.
 
-1. Navigate to the build directory : 
+## Compilation instructions ( if you are using the minGW compiler)
+
+1. Open a PowerShell/cmd terminal and navigate to the project's directory.
+   
+2. Navigate to the build directory : 
 ```
 cd build 
 ```
 
-2. Generate the makefiles:
+3. Generate the makefiles:
 ```
 cmake -G "MinGW Makefiles" ..
 ```
 
-3. Compile the project :   
+4. Compile the project : (assuming that you use the minGW compiler)   
 ``` 
 mingw32-make 
 ```
