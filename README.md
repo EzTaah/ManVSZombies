@@ -1,5 +1,5 @@
 # ManVsZombie
-> The game is currently under development.
+> The game is currently under development.  
 A 2D top-down zombie shooter.
 
 ### Controls
