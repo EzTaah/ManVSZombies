@@ -1,6 +1,7 @@
-# ManVsZombie
-> The game is currently under development.  
+# ManVsZombie 
+
 A 2D top-down zombie shooter.
+> The game is currently under development. 
 
 ### Controls
 - Use `Z` `Q` `S` `D` to move the player.
