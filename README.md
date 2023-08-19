@@ -1,7 +1,6 @@
 # ManVsZombie 
 
 A 2D top-down zombie shooter.
-> The game is currently under development. 
 
 ### Controls
 - Use `Z` `Q` `S` `D` to move the player.
@@ -12,6 +11,7 @@ A 2D top-down zombie shooter.
 # Building and Development
 
 ## Informations
+- The game is currently under development. 
 - Game developed using the [Raylib](https://www.raylib.com/) library.
 
 ## Prerequisites
