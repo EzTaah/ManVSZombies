@@ -18,7 +18,7 @@ A 2D top-down zombie shooter.
 - Ensure you have a compiler installed on your computer.
 - There's no need to install Raylib separately. It is already precompiled and stored in the 'lib' folder.
 
-## Compilation instructions ( if you are using the minGW compiler)
+## Compilation instructions
 
 1. Open a PowerShell/cmd terminal and navigate to the project's directory.
    
