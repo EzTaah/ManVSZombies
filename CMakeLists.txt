@@ -20,7 +20,7 @@ include_directories(src/rendering/include)
 link_directories(lib/raylib)
 
 # source -> ancien
-# Source files
+# Source files 
 set(SOURCE_FILES
     src/main.cpp
 
