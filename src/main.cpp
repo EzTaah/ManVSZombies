@@ -1,18 +1,38 @@
-#include "game.hpp"
-#include <raylib.hpp> 
+#include "Game.hpp"
+#include "SFML/Graphics.hpp"
 
 
 int main()
 {
-    InitWindow(1366, 768, "ManVsZombie");
-    SetWindowState(FLAG_VSYNC_HINT);
-    Game game = Game();
+    // === Create the window
+    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(1366, 764), "2D-zombie-shooter");
+    window.setFramerateLimit(144);
 
-    while (!WindowShouldClose())
+    // === Create the game ===
+    Game game = Game(window);
+
+    while(window.isOpen())
     {
+        // === Update ===
         game.Update();
+
+        // === Render ===
         game.Render();
+
+        // === Process events ===
+        sf::Event event;
+        while(window.pollEvent(event))
+        {
+            switch(event.type)
+            {
+                // If the window is closed
+                case sf::Event::Closed: 
+                    window.close();
+                    exit(EXIT_SUCCESS);
+
+                default:
+                    break;
+            }
+        }
     }
-    CloseWindow();
-    return 0;
 }

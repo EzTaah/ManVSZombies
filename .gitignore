@@ -1,6 +1,2 @@
-# Ignore everything in the 'build' directory
-build/*
-
-# But don't ignore the directory itself and the .gitkeep file
-!build/
-!build/.gitkeep
+# Ignore the build directory
+build/

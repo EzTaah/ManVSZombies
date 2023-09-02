@@ -1,42 +1,60 @@
-# ManVsZombie
+<div align="center">
 
-A 2D top-down game where a player character can move and eliminate zombies.   
-The game is currently under development.
+2D-zombie-shooter
+=========
 
-## Features
-- 2D top-down view 
-- Collision detection
-- Zombie adversaries
+"A 2D top-down multiplayer game where a player can move and eliminate zombies."  
 
-### Keys
-- Use `Z` `Q` `S` `D` to move the player.
-- Aim with the mouse and click the left button to shoot.
+<br undefined>
+
+**The game is currently under development.**
+
+<br undefined>
+<br undefined>
+<br undefined>
+</div>
 
 ---
 
 # Building and Development
 
-## Informations
-> Game developed using the [Raylib](https://www.raylib.com/) library.
+**This game is build on Windows with [CMake](https://cmake.org/download/) and the [MinGW](https://winlibs.com/) compiler.**
 
-## Compilation instructions ( if you are using the minGW compiler)
+<br undefined>
 
-1. Navigate to the build directory : 
+**Here are the compilation instructions :**
+
+
+1. Open a PowerShell terminal and navigate to the project's directory.
+
+2. Create a build directory : 
+```
+mkdir build
+```
+
+3. Navigate to the build directory : 
 ```
 cd build 
 ```
 
-2. Generate the makefiles:
+4. Generate the makefiles (Choose between the debug and the release version) :
 ```
-cmake -G "MinGW Makefiles" ..
+cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
+```
+```
+cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-3. Compile the project :   
+5. Compile the project :
 ``` 
 mingw32-make 
 ```
 
-4. Run the game :   
+5. Run the game (Choose between the debug and the release version) :   
 ```
 .\debug.exe
 ```
+```
+.\release.exe
+```
+ 
