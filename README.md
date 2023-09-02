@@ -3,7 +3,7 @@
 2D-zombie-shooter
 =========
 
-"A 2D top-down multiplayer game where a player can move and eliminate zombies."  
+"A 2D top-down game where a player can move and eliminate zombies."  
 
 <br undefined>
 
