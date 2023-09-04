@@ -3,10 +3,10 @@
 
 
 Bullet::Bullet(const ut::Vector2f& position, const ut::Vector2f& speed)
-    : MovingEntity(position, {7.0f, 7.0f}),      // {7.0f, 7.0f} is the size of the bullet
+    :  MovingEntity(position, speed, {7.0f, 7.0f}),      // {7.0f, 7.0f} is the size of the bullet
       _isActive(false)
 {
-    _speed = speed;     // When we create an entity, its speed is set to zero. Here, we modify the speed value.
+    _shape.setFillColor(sf::Color::Green);
 }
 
 
@@ -35,7 +35,8 @@ void Bullet::CalculateNextMove()
 
 
 // === Rendering ===
-void Bullet::Render() const
+void Bullet::Render(sf::RenderWindow* windowPtr)
 {
-    //DrawRectangle(_positionInViewSpace.x, _positionInViewSpace.y, _size.x, _size.y, GREEN);
+    _shape.setPosition(_position.x, _position.y);
+    windowPtr->draw(_shape);
 }

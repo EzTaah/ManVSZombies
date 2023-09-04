@@ -1,5 +1,5 @@
 #pragma once
-#include "moving_entity.hpp"
+#include "MovingEntity.hpp"
 #include "utils.hpp"
 
 
@@ -19,7 +19,7 @@ public:
     void CalculateNextMove() override;
 
     // === Rendering ===
-    void Render() const override;
+    void Render(sf::RenderWindow* windowPtr) override;
 
 private:
     bool _isActive;

@@ -9,5 +9,5 @@ public:
     Wall(const ut::Vector2f& position);
 
     // === Rendering ===
-    void Render() const override;
+    void Render(sf::RenderWindow* windowPtr) override;
 };

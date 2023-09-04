@@ -10,15 +10,15 @@ public:
 
     // === Accessors ===
     std::vector<std::vector<int>> GetGrid() const;
-    ut::Vector2fGetGridDimensions() const;
-    ut::Vector2fGetNumberOfTiles() const;
-    ut::Vector2fGetPositionInViewSpace() const;
+    ut::Vector2f GetGridDimensions() const;
+    ut::Vector2f GetNumberOfTiles() const;
+    ut::Vector2f GetPositionInViewSpace() const;
 
     // === Mutators ===
     void SetPositionInViewSpace(const ut::Vector2f& newPositionInViewSpace);
 
 private:
     std::vector<std::vector<int>> _grid;
-    ut::Vector2f_gridDimensions;
-    ut::Vector2f_positionInViewSpace;
+    ut::Vector2f _gridDimensions;
+    ut::Vector2f _positionInViewSpace;
 };

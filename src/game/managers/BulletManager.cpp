@@ -2,16 +2,21 @@
 #include "Bullet.hpp"
 #include <cmath>
 #include <vector>
+#include "SFML/Graphics.hpp"
 
 
-BulletManager::BulletManager()
+BulletManager::BulletManager(std::vector<MovingEntity*>* movingEntitiesArrayPtr)
     : _bulletsArray(),
-      _bulletSpeed(1500.0f)
-{}
+      _bulletSpeed(1500.0f),
+      _movingEntitiesArrayPtr(movingEntitiesArrayPtr)
+{
+    // Empeche le std::vector faire la réallocation de mémoire (ce qui rend tt les pointeurs invalide)
+    _bulletsArray.reserve(100);
+}
 
 
 // === Utility functions ===
-ut::Vector2f CalculateBulletDirection(const ut::Rectanglef& playerRectangle, float bulletSpeed);
+ut::Vector2f CalculateBulletDirection(const ut::Rectanglef& playerRectangle, float bulletSpeed, sf::RenderWindow* windowPtr);
 
 
 // === Accessors ===
@@ -30,13 +35,35 @@ std::vector<ut::Rectanglef> BulletManager::GetBulletsRectangle() const
 
 
 // === Mutators ===
-void BulletManager::ShootNewBullet(const ut::Rectanglef& playerRectangle, const ut::Rectanglef& playerRectangleInViewSpace)
+void BulletManager::ShootNewBullet(sf::RenderWindow* windowPtr, const ut::Rectanglef& playerRectangle, const ut::Rectanglef& playerRectangleInViewSpace)
 {
-    const ut::Vector2f bulletDirection = CalculateBulletDirection(playerRectangleInViewSpace, _bulletSpeed);
+    // Calculate the bullet direction
+    const ut::Vector2f bulletDirection = CalculateBulletDirection(playerRectangleInViewSpace, _bulletSpeed, windowPtr);
+
+    // Add the bullet to the array
     _bulletsArray.push_back(Bullet({playerRectangle.x, playerRectangle.y}, {bulletDirection.x, bulletDirection.y}));
+
+    // Add the adress of the bullet instance inside the movingentities array
+    _movingEntitiesArrayPtr->push_back(&_bulletsArray.back());  // Ajoute l'adresse de de la derniere instance du tableau (donc celle que l'on vient d'ajouter).
 }
 
-void BulletManager::RemoveBullet(int index) {
+void BulletManager::RemoveBullet(int index) 
+{
+    // Get the address of the bullet instance you want to remove
+    Bullet* bulletToRemove = &_bulletsArray[index];
+
+    // Find and remove the corresponding pointer in _movingEntitiesArrayPtr
+    for (size_t i{0}; i < _movingEntitiesArrayPtr->size(); ++i) 
+    {
+        if ((*_movingEntitiesArrayPtr)[i] == bulletToRemove)    // bulletToRemove est un pointeur, et (*_movingEntitiesArrayPtr)[i] retourne un pointeur.
+        {
+            // Supprimer le pointeur correspondant du tableau _movingEntitiesArrayPtr
+            _movingEntitiesArrayPtr->erase(_movingEntitiesArrayPtr->begin() + i);
+            break;
+        }
+    }
+
+    // remove the bullet instance from the array
     _bulletsArray.erase(_bulletsArray.begin() + index);
 }
 
@@ -59,23 +86,11 @@ void BulletManager::CalculateNextMoveBullets()
         bullet.CalculateNextMove();
 }
 
-void BulletManager::UpdateHorizontalPositionBullets()
-{
-    for (Bullet& bullet : _bulletsArray)
-        bullet.UpdateHorizontalPosition();
-}
-
-void BulletManager::UpdateVerticalPositionBullets()
-{
-    for (Bullet& bullet : _bulletsArray)
-        bullet.UpdateVerticalPosition();
-}
-
 
 // ==================
-ut::Vector2f CalculateBulletDirection(const ut::Rectanglef& playerRectangle, float bulletSpeed)
+ut::Vector2f CalculateBulletDirection(const ut::Rectanglef& playerRectangle, float bulletSpeed, sf::RenderWindow* windowPtr)
 {
-    ut::Vector2f mousePosition = GetMousePosition();     // get a vector containing the mouse position
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowPtr);     // get a vector containing the mouse position
 
     // Calculate the direction from the player to the mouse
     ut::Vector2f direction = { mousePosition.x - playerRectangle.x, mousePosition.y - playerRectangle.y };

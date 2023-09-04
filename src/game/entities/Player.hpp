@@ -8,6 +8,12 @@ class Player : public MovingEntity
 public:
     Player(const ut::Vector2f& position);
 
+    // === Accessors ===
+    ut::Rectanglef GetRectangleInViewSpace() const;
+
+    // === Logic ===
+    void CalculateNextMove();
+
     // === Rendering ===
-    void Render() const override;
+    void Render(sf::RenderWindow* windowPtr) override;
 };

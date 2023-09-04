@@ -8,13 +8,13 @@
 #include "WallManager.hpp"
 #include "CollisionManager.hpp"
 #include "Renderer.hpp"
-#include <memory>
+
 
 
 class Game
 {
 public:
-    Game();
+    Game(sf::RenderWindow* windowPtr);
     void Update();
     void Render();
 
@@ -25,6 +25,11 @@ private:
     double _lastUpdateTimeEvent1;
     double _lastUpdateTimeEvent2;
 
+    sf::RenderWindow* _windowPtr;
+
+    std::vector<Entity*> _staticEntitiesArray;
+    std::vector<MovingEntity*> _movingEntitiesArray;
+
     Grid _grid;
     Player _player;
     BulletManager _bulletManager;
@@ -32,7 +37,4 @@ private:
     WallManager _wallManager;
     CollisionManager _collisionManager;
     Renderer _renderer;
-
-    std::vector<std::shared_ptr<Entity>> _entitiesArray;
-    std::vector<std::shared_ptr<MovingEntity>> _movingEntitiesArray;
 };

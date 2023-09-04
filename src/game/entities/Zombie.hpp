@@ -13,5 +13,5 @@ public:
     void CalculateNextMove(const ut::Rectanglef& playerRectangle);
 
     // Rendering
-    void Render() const override;
+    void Render(sf::RenderWindow* windowPtr) override;
 };

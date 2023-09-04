@@ -4,10 +4,13 @@
 
 Wall::Wall(const ut::Vector2f& position)
     : Entity(position, {30.0f, 30.0f})    // {30.0f, 30.0f} is the size of a wall square
-{}
+{
+    _shape.setFillColor(sf::Color::Black);
+    _shape.setPosition(_position.x, _position.y);
+}
 
 
 // === Rendering ===
-void Wall::Render() const {
-    // DrawRectangle(_positionInViewSpace.x, _positionInViewSpace.y, _size.x, _size.y, BLACK);
+void Wall::Render(sf::RenderWindow* windowPtr) {
+    windowPtr->draw(_shape);
 }

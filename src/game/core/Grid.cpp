@@ -43,20 +43,20 @@ std::vector<std::vector<int>> Grid::GetGrid() const {
     return _grid;
 }
 
-ut::Vector2fGrid::GetGridDimensions() const {
+ut::Vector2f Grid::GetGridDimensions() const {
     return _gridDimensions;
 }
 
-ut::Vector2fGrid::GetNumberOfTiles() const {
+ut::Vector2f Grid::GetNumberOfTiles() const {
     return {_grid[0].size(), _grid.size()};
 }
 
-ut::Vector2fGrid::GetPositionInViewSpace() const {
+ut::Vector2f Grid::GetPositionInViewSpace() const {
     return _positionInViewSpace;
 }
 
 
 // === Mutators ===
-void GridManager::SetPositionInViewSpace(const ut::Vector2f& newPositionInViewSpace) {
+void Grid::SetPositionInViewSpace(const ut::Vector2f& newPositionInViewSpace) {
     _positionInViewSpace = newPositionInViewSpace;
 }

@@ -6,10 +6,10 @@ int main()
 {
     // === Create the window
     sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(1366, 764), "2D-zombie-shooter");
-    window.setFramerateLimit(144);
+    window.setFramerateLimit(60);
 
     // === Create the game ===
-    Game game = Game(window);
+    Game game = Game(&window);
 
     while(window.isOpen())
     {

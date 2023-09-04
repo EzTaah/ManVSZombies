@@ -12,30 +12,43 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(SOURCE_FILES
     src/main.cpp
 
-    src/application/globals.cpp
-    src/application/WindowManager.cpp
+    src/base/utils.cpp
+
+    src/engine/CollisionManager.cpp
 
     src/game/core/Game.cpp
-    src/game/core/game_states/GameOverState.cpp
-    src/game/core/game_states/MenuState.cpp
-    src/game/core/game_states/PlayingState.cpp 
+    src/game/core/Grid.cpp
 
-    src/game/entities/Ball.cpp
-    src/game/entities/BotPaddle.cpp
-    src/game/entities/Paddle.cpp
+    src/game/entities/Bullet.cpp
+    src/game/entities/Entity.cpp
+    src/game/entities/MovingEntity.cpp
+    src/game/entities/Player.cpp
+    src/game/entities/Wall.cpp
+    src/game/entities/Zombie.cpp
 
-    src/game/managers/AudioManager.cpp
+    src/game/managers/BulletManager.cpp
+    src/game/managers/WallManager.cpp
+    src/game/managers/ZombieManager.cpp
+
+    src/game/rendering/Camera.cpp
+    src/game/rendering/Renderer.cpp
+
 )
 
 
 # Common Include directories
 set(INCLUDE_DIRS
     src/3rdparty/raylib
-    src/application
+    src/3rdparty/SFML/include
+
+    src/base
+
+    src/engine
+
     src/game/core
-    src/game/core/game_states
     src/game/entities
     src/game/managers
+    src/game/rendering
 )
 
 # Output directory
@@ -52,8 +65,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_include_directories(debug PRIVATE ${INCLUDE_DIRS})
 
     # Link external libraries 
-    target_link_directories(debug PRIVATE src/3rdparty/raylib) # Indicate where is the .a file of the raylib library
-    target_link_libraries(debug PRIVATE raylib opengl32 gdi32 winmm) # Indicate which library we need
+    target_link_directories(debug PRIVATE src/3rdparty/SFML/lib src/3rdparty/raylib) # Indicate where is the .a file of the libraries 
+    target_link_libraries(debug PRIVATE raylib sfml-system sfml-window sfml-graphics winmm) # Indicate which library we need
 
     # Add compilation options
     target_compile_options(debug PRIVATE -Wall -Wextra -g) # -g -> give informations to the debugger
@@ -70,8 +83,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_include_directories(release PRIVATE ${INCLUDE_DIRS})
 
     # Link external libraries 
-    target_link_directories(release PRIVATE src/3rdparty/raylib) # Indicate where is the .a file of the raylib library
-    target_link_libraries(release PRIVATE raylib opengl32 gdi32 winmm) # Indicate which library we need
+    target_link_directories(debug PRIVATE src/3rdparty/SFML/lib) # Indicate where is the .a file of the SFML library
+    target_link_libraries(debug PRIVATE sfml-system sfml-window sfml-graphics winmm) # Indicate which library we need
 
     # Add compilation options
     target_compile_options(release PRIVATE -O3) # Optimize the program (takes longer to compile but runs faster)
@@ -84,9 +97,6 @@ endif()
 
 
 
-
-
 ###############
 # Remove the command line when running the program
 #set_target_properties(release PROPERTIES LINK_FLAGS "-mwindows")
-

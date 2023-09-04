@@ -26,20 +26,20 @@ void MovingEntity::SetPotentialMovement(const ut::Vector2f& movement) {
 
 // === Movemement & Logic ===
 void MovingEntity::UpdateHorizontalPosition() {
-    _position.x += _potentialMovement.x * GetFrameTime();
+    _position.x += _potentialMovement.x * 0.030;
 }
 
 void MovingEntity::UpdateVerticalPosition()
 {
-    _position.y += _potentialMovement.y * GetFrameTime();
+    _position.y += _potentialMovement.y * 0.030;
 }
 
 
 // === Collision Handling ===
 void MovingEntity::RevertHorizontalPosition() {
-    _position.x -= _potentialMovement.x * GetFrameTime();
+    _position.x -= _potentialMovement.x * 0.030;
 }
 
 void MovingEntity::RevertVerticalPosition() {
-    _position.y -= _potentialMovement.y * GetFrameTime();
+    _position.y -= _potentialMovement.y * 0.010;
 }

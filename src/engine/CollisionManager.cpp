@@ -1,5 +1,4 @@
-#include "collision_manager.hpp"
-#include <raylib.hpp>
+#include "CollisionManager.hpp"
 
 
 CollisionManager::CollisionManager() {}
@@ -8,10 +7,21 @@ CollisionManager::CollisionManager() {}
 // === Collisions detections methods ===
 bool CollisionManager::AreColliding(const ut::Rectanglef& entityRectangle1, const ut::Rectanglef& entityRectangle2) 
 {
+    // Vérifie si l'un des rectangles est à gauche de l'autre
+    if (entityRectangle1.x + entityRectangle1.width < entityRectangle2.x || 
+        entityRectangle2.x + entityRectangle2.width < entityRectangle1.x) {
+        return false;
+    }
 
-    // Create my own CheckCollisions
+    // Vérifie si l'un des rectangles est au-dessus de l'autre
+    if (entityRectangle1.y + entityRectangle1.height < entityRectangle2.y || 
+        entityRectangle2.y + entityRectangle2.height < entityRectangle1.y) {
+        return false;
+    }
 
-    return false;
+    // Si aucun des cas ci-dessus n'est vrai, alors les rectangles se chevauchent
+    return true;
+
 }
 
 bool CollisionManager::IsOutsideBoundaryX(const ut::Rectanglef& entityRectangle, const float gridDimensionX)

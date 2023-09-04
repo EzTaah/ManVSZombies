@@ -5,7 +5,12 @@ Entity::Entity(const ut::Vector2f& position, const ut::Vector2f& size)
     : _position(position),
       _positionInViewSpace(position),
       _size(size)
-{}
+{
+    // Setup the shape position
+
+    _shape.setSize({_size.x, _size.y});
+    _shape.setPosition(_position.x, _position.y);
+}
 
 
 // === Accessors ===

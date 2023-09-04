@@ -14,16 +14,16 @@ int GetRandomNumber(int min, int max);
 
 // =========================== OTHER ===========================
 struct Vector2f {
-    float x,
-    float y
-}
+    float x;
+    float y;
+};
 
 struct Rectanglef {
-    float width,
-    float height,
-    float x,
-    float y
-}
+    float width;
+    float height;
+    float x;
+    float y;
+};
 
 
 bool EventTriggered(double interval, double& lastUpdateTime);

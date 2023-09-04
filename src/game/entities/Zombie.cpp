@@ -4,8 +4,10 @@
 
 
 Zombie::Zombie(const ut::Vector2f& position)
-    : MovingEntity(position, {30.0f, 30.0f})     // {30.0f, 30.0f} is the size of the zombie
-{}
+    : MovingEntity(position, {200.0f, 200.0f}, {30.0f, 30.0f})     // {30.0f, 30.0f} is the size of the zombie
+{
+    _shape.setFillColor(sf::Color::Red);
+}
 
 
 // === Utility functions ===
@@ -27,8 +29,9 @@ void Zombie::CalculateNextMove(const ut::Rectanglef& playerRectangle_)
 
 
 // === Render ===
-void Zombie::Render() const {
-    DrawRectangle(_positionInViewSpace.x, _positionInViewSpace.y, _size.x, _size.y, RED);
+void Zombie::Render(sf::RenderWindow* windowPtr) {
+    _shape.setPosition(_position.x, _position.y);
+    windowPtr->draw(_shape);
 }
 
 
