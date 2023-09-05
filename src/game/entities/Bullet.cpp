@@ -2,46 +2,32 @@
 
 
 Bullet::Bullet(const Vector2& position, const Vector2& speed)
-    : _position(position),
-      _positionInViewSpace(position),
-      _potentialMovement({0.0f, 0.0f}),
-      _speed(speed),
-      _size({7.0f, 7.0f})
+    : MovingEntity(position, speed, {7.0f, 7.0f}),      // {7.0f, 7.0f} is the size of the bullet
+      _isActive(false)
 {}
 
 
 // === Accessors ===
-Vector2 Bullet::GetPosition() const {
-    return _position;
-}
-
-Vector2 Bullet::GetPositionInViewSpace() const {
-    return _positionInViewSpace;
-}
-
-Rectangle Bullet::GetRectangle() const {
-    return {_position.x, _position.y, _size.x, _size.y};
+bool Bullet::IsActive() const {
+    return _isActive;
 }
 
 
 // === Setters ===
-void Bullet::SetPositionInViewSpace(const Vector2& newPositionInViewSpace){
-    _positionInViewSpace = newPositionInViewSpace;
+void Bullet::Activate() {
+    _isActive = true;
+}
+
+void Bullet::Desactivate() {
+    _isActive = false;
 }
 
 
-// === Movemement & Logic ===
-void Bullet::CalculateNextMove(){
+// === Logic ===
+void Bullet::CalculateNextMove()
+{
     _potentialMovement.x = _speed.x;
     _potentialMovement.y = _speed.y; 
-}
-
-void Bullet::UpdateHorizontalPosition() {
-    _position.x += _potentialMovement.x * GetFrameTime();
-}
-
-void Bullet::UpdateVerticalPosition() {
-    _position.y += _potentialMovement.y * GetFrameTime();
 }
 
 
