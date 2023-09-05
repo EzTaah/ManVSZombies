@@ -20,6 +20,8 @@ set(SOURCE_FILES
     src/game/core/Grid.cpp
 
     src/game/entities/Bullet.cpp
+    src/game/entities/Entity.cpp
+    src/game/entities/MovingEntity.cpp
     src/game/entities/Player.cpp
     src/game/entities/Wall.cpp
     src/game/entities/Zombie.cpp
