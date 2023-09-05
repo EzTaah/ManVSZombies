@@ -1,5 +1,5 @@
 #pragma once
-#include "wall.hpp"
+#include "Wall.hpp"
 #include <raylib.hpp>
 #include <vector>
 

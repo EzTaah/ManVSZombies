@@ -1,4 +1,4 @@
-#include "renderer.hpp"
+#include "Renderer.hpp"
 #include <raylib.hpp>
 
 
@@ -19,13 +19,13 @@ Renderer::Renderer(const Rectangle& playerRectangle)
 
 
 // === Update positionInViewSpace for all entities ===
-void Renderer::UpdatePositionInViewSpaceEntities(GridManager& gridManager, Player& player, BulletManager& bulletManager, ZombieManager& zombieManager, WallManager& wallManager)
+void Renderer::UpdatePositionInViewSpaceEntities(Grid& grid, Player& player, BulletManager& bulletManager, ZombieManager& zombieManager, WallManager& wallManager)
 {
     // Grid
     Vector2 gridPositionInViewSpace;
     gridPositionInViewSpace.x = 0.0f - _gameCamera.GetPosition().x;  // 0.0f is the grid position
     gridPositionInViewSpace.y = 0.0f - _gameCamera.GetPosition().y;
-    gridManager.SetPositionInViewSpace(gridPositionInViewSpace);
+    grid.SetPositionInViewSpace(gridPositionInViewSpace);
 
     // Player 
     Vector2 playerPositionInViewSpace;
@@ -56,17 +56,17 @@ void Renderer::UpdateCameraPosition(const Rectangle& playerRectangle)
 
 
 // === Render ===
-void Renderer::Render(const GridManager& gridManager, const Player& player, const BulletManager& bulletManager, const ZombieManager& zombieManager, const WallManager& wallManager)
+void Renderer::Render(const Grid& grid, const Player& player, const BulletManager& bulletManager, const ZombieManager& zombieManager, const WallManager& wallManager)
 {
     BeginDrawing();
     ClearBackground(BLACK);
 
     // Render grid
-    for(unsigned int i{0} ; i < gridManager.GetGrid().size() ; ++i)
+    for(unsigned int i{0} ; i < grid.GetGrid().size() ; ++i)
     {
-        for(unsigned int n{0} ; n < gridManager.GetGrid()[i].size() ; ++n)
+        for(unsigned int n{0} ; n < grid.GetGrid()[i].size() ; ++n)
         {
-            DrawRectangle(gridManager.GetPositionInViewSpace().x + (30.0f * n) + 1, gridManager.GetPositionInViewSpace().y + (30.0f * i) + 1, 29.0f, 29.0f, DARKGRAY);
+            DrawRectangle(grid.GetPositionInViewSpace().x + (30.0f * n) + 1, grid.GetPositionInViewSpace().y + (30.0f * i) + 1, 29.0f, 29.0f, DARKGRAY);
         }
     }
 

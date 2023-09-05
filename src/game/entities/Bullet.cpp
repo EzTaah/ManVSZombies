@@ -1,4 +1,4 @@
-#include "bullet.hpp"
+#include "Bullet.hpp"
 
 
 Bullet::Bullet(const Vector2& position, const Vector2& speed)

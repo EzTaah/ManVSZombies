@@ -1,5 +1,5 @@
 #pragma once
-#include "zombie.hpp"
+#include "Zombie.hpp"
 #include <raylib.hpp>
 #include <vector>
 

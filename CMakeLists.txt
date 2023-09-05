@@ -1,74 +1,99 @@
+# CMake minimum version and project details
 cmake_minimum_required(VERSION 3.10)
+project(2D-zombie-shooter)
 
-# Project name
-project(ManVsZombie)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Include directories, CMake will inform the compiler to also look in this directory when resolving #include directives.
-include_directories(src)
-include_directories(lib/raylib)
-include_directories(src/core)    
-include_directories(src/entities/include)
-include_directories(src/managers/include)
-include_directories(src/utilities)
-include_directories(src/rendering/include)
 
-# Link directories (where the .a or .lib files are located)
-link_directories(lib/raylib)
-
-# source -> ancien
 # Source files
 set(SOURCE_FILES
     src/main.cpp
 
-    src/core/game.hpp
-    src/core/game.cpp
+    src/base/utils.cpp
 
-    src/entities/include/bullet.hpp
-    src/entities/src/bullet.cpp
-    src/entities/include/player.hpp
-    src/entities/src/player.cpp
-    src/entities/include/wall.hpp
-    src/entities/src/wall.cpp
-    src/entities/include/zombie.hpp
-    src/entities/src/zombie.cpp
+    src/engine/CollisionManager.cpp
 
-    src/managers/include/bullet_manager.hpp
-    src/managers/src/bullet_manager.cpp
-    src/managers/include/collision_manager.hpp
-    src/managers/src/collision_manager.cpp
-    src/managers/include/grid_manager.hpp
-    src/managers/src/grid_manager.cpp
-    src/managers/include/wall_manager.hpp
-    src/managers/src/wall_manager.cpp
-    src/managers/include/zombie_manager.hpp
-    src/managers/src/zombie_manager.cpp
+    src/game/core/Game.cpp
+    src/game/core/Grid.cpp
 
-    src/rendering/include/renderer.hpp
-    src/rendering/src/renderer.cpp
-    src/rendering/include/game_camera.hpp
-    src/rendering/src/game_camera.cpp
+    src/game/entities/Bullet.cpp
+    src/game/entities/Player.cpp
+    src/game/entities/Wall.cpp
+    src/game/entities/Zombie.cpp
 
-    src/utilities/library.hpp
-    src/utilities/library.cpp
+    src/game/managers/BulletManager.cpp
+    src/game/managers/WallManager.cpp
+    src/game/managers/ZombieManager.cpp
+
+    src/game/rendering/GameCamera.cpp
+    src/game/rendering/Renderer.cpp
+
 )
 
-# Set the location of the exe file that will be created
-add_executable(debug ${SOURCE_FILES})     # <- this is the target
 
-# include -> ancien
+# Common Include directories
+set(INCLUDE_DIRS
+    src/3rdparty/raylib
 
-# Link to all the needed library
-target_link_libraries(debug raylib opengl32 gdi32 winmm)
+    src/base
 
-# add dll files inside the executable
-target_link_options(debug PRIVATE -static -static-libstdc++ -static-libgcc)
+    src/engine
 
-# compiler compiler flags 
-target_compile_options(debug PRIVATE -Wall -Wextra)
+    src/game/core
+    src/game/entities
+    src/game/managers
+    src/game/rendering
+)
 
-#compiler linker flags
-set_target_properties(debug PROPERTIES LINK_FLAGS "-mwindows")
+# Output directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
+
+
+
+################################ DEBUG ################################
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # Create the executable from the sources files
+    add_executable(debug ${SOURCE_FILES})
+
+    # Indicate where are all the header files
+    target_include_directories(debug PRIVATE ${INCLUDE_DIRS})
+
+    # Link external libraries 
+    target_link_directories(debug PRIVATE src/3rdparty/raylib) # Indicate where is the .a file of the libraries 
+    target_link_libraries(debug PRIVATE raylib opengl32 gdi32 winmm) # Indicate which library we need
+
+    # Add compilation options
+    target_compile_options(debug PRIVATE -Wall -Wextra -g) # -g -> give informations to the debugger
+endif()
+########################################################################
+
+
+################################ RELEASE ################################
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    # Create the executable from the sources files
+    add_executable(release WIN32 ${SOURCE_FILES}) # WIN32 indicate that we are building an app with a ui, not a terminal app (it will not open the terminal )
+
+    # Indicate where are all the header files
+    target_include_directories(release PRIVATE ${INCLUDE_DIRS})
+
+    # Link external libraries 
+    target_link_directories(release PRIVATE src/3rdparty/raylib) # Indicate where is the .a file of the libraries 
+    target_link_libraries(release PRIVATE raylib opengl32 gdi32 winmm) # Indicate which library we need
+
+    # Add compilation options
+    target_compile_options(release PRIVATE -O3) # Optimize the program (takes longer to compile but runs faster)
+
+    # Add some dll files inside the executable
+    target_link_options(release PRIVATE -static -static-libstdc++ -static-libgcc)
+endif()
+##########################################################################
+
+
+
+
+###############
+# Remove the command line when running the program
+#set_target_properties(release PROPERTIES LINK_FLAGS "-mwindows")
