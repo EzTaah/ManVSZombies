@@ -10,7 +10,7 @@ Use `Z` `Q` `S` `D` to move the player, aim with the mouse and click the left bu
 
 <br>
 
-This game is developed in C++ using Object-Oriented Programming principles and leverages the Raylib library for graphical rendering.
+This game is developed in C++ using Object-Oriented Programming principles and leverages the [raylib](https://www.raylib.com/) library for graphical rendering.
 
 
 <br>
