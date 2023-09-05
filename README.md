@@ -1,43 +1,63 @@
-# ManVsZombie 
+<div align="center">
 
-A 2D top-down zombie shooter.
+# ManVSZombies
 
-### Controls
-- Use `Z` `Q` `S` `D` to move the player.
-- Aim with the mouse and click the left button to shoot.
+*Developed in August 2023*
+
+<br>
+
+Use `Z` `Q` `S` `D` to move the player, aim with the mouse and click the left button to shoot.
+
+<br>
+
+This game is developed in C++ using Object-Oriented Programming principles and leverages the Raylib library for graphical rendering.
+
+
+<br>
+<br>
+
+</div>
 
 ---
 
 # Building and Development
 
-## Informations
-- The game is currently under development. 
-- Game developed using the [Raylib](https://www.raylib.com/) library.
+The game was developed on a Windows platform, utilizing CMake for build configuration and the MinGW compiler for code compilation.  
+Follow the instructions below if you wish to compile using this setup.
 
-## Prerequisites
-- Ensure you have a compiler installed on your computer.
-- There's no need to install Raylib separately. It is already precompiled and stored in the 'lib' folder.
+<br>
 
 ## Compilation instructions
 
-1. Open a PowerShell/cmd terminal and navigate to the project's directory.
-   
-2. Navigate to the build directory : 
+1. Open a PowerShell terminal and navigate to the project's directory.
+
+2. Create a build directory : 
+```bash
+mkdir build
 ```
+
+3. Navigate to the build directory : 
+```bash
 cd build 
 ```
 
-3. Generate the makefiles:
+4. Generate the makefiles (Choose between the debug and the release version) :
+```bash
+cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
 ```
-cmake -G "MinGW Makefiles" ..
+```bash
+cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-4. Compile the project : (assuming that you use the minGW compiler)   
-``` 
+5. Compile the project :
+```bash
 mingw32-make 
 ```
 
-4. Run the game :   
-```
+5. Run the game (Choose between the debug and the release version) :   
+```bash
 .\debug.exe
+```
+```bash
+.\release.exe
 ```
