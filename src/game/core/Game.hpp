@@ -1,11 +1,11 @@
 #pragma once
-#include "grid_manager.hpp"
-#include "player.hpp"
-#include "bullet_manager.hpp"
-#include "zombie_manager.hpp"
-#include "wall_manager.hpp"
-#include "collision_manager.hpp"
-#include "renderer.hpp"
+#include "Grid.hpp"
+#include "Player.hpp"
+#include "BulletManager.hpp"
+#include "ZombieManager.hpp"
+#include "WallManager.hpp"
+#include "CollisionManager.hpp"
+#include "Renderer.hpp"
 
 
 class Game
@@ -25,7 +25,7 @@ private:
     double _lastUpdateTimeEvent1;
     double _lastUpdateTimeEvent2;
 
-    GridManager _gridManager;
+    Grid _grid;
     Player _player;
     BulletManager _bulletManager;
     ZombieManager _zombieManager;

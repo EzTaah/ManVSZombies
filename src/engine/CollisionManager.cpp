@@ -1,4 +1,4 @@
-#include "collision_manager.hpp"
+#include "CollisionManager.hpp"
 #include <raylib.hpp>
 
 

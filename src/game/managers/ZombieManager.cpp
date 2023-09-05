@@ -1,6 +1,6 @@
-#include "zombie_manager.hpp"
-#include "zombie.hpp"
-#include "library.hpp"
+#include "ZombieManager.hpp"
+#include "Zombie.hpp"
+#include "utils.hpp"
 #include <raylib.hpp>
 #include <cmath>
 #include <vector>

@@ -1,5 +1,5 @@
-#include "wall_manager.hpp"
-#include "wall.hpp"
+#include "WallManager.hpp"
+#include "Wall.hpp"
 #include <array>
 
 

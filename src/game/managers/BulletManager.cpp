@@ -1,5 +1,5 @@
-#include "bullet_manager.hpp"
-#include "bullet.hpp"
+#include "BulletManager.hpp"
+#include "Bullet.hpp"
 #include <raylib.hpp>
 #include <cmath>
 #include <vector>

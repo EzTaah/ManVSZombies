@@ -1,5 +1,5 @@
-#include "game.hpp"
-#include "library.hpp"
+#include "Game.hpp"
+#include "utils.hpp"
 #include <raylib.hpp>
 #include <iostream>
 #include <utility>
@@ -8,11 +8,11 @@
 
 ///////////////// PUBLIC /////////////////
 Game::Game() 
-    : _gridManager(),
+    : _grid(),
       _player({500.0f, 600.0f}),
       _bulletManager(),
       _zombieManager(),
-      _wallManager(_gridManager.GetGrid()),     // Init all the walls
+      _wallManager(_grid.GetGrid()),     // Init all the walls
       _collisionManager(),
       _renderer(_player.GetRectangle()),     // Setup camera
       _lastUpdateTimeEvent1(0.0),
@@ -33,8 +33,8 @@ void Game::Update() {
 void Game::Render()
 {
     _renderer.UpdateCameraPosition(_player.GetRectangle());
-    _renderer.UpdatePositionInViewSpaceEntities(_gridManager, _player, _bulletManager, _zombieManager, _wallManager);
-    _renderer.Render(_gridManager, _player, _bulletManager, _zombieManager, _wallManager);
+    _renderer.UpdatePositionInViewSpaceEntities(_grid, _player, _bulletManager, _zombieManager, _wallManager);
+    _renderer.Render(_grid, _player, _bulletManager, _zombieManager, _wallManager);
 }
 
 
@@ -64,7 +64,7 @@ void Game::_CalculateNextMoveEntities()
 {
     // Spawn new zombies if needed
     if (EventTriggered(0.5, _lastUpdateTimeEvent2)) 
-        _zombieManager.SpawnNewZombie(_gridManager.GetGrid(), _gridManager.GetNumberOfTiles());
+        _zombieManager.SpawnNewZombie(_grid.GetGrid(), _grid.GetNumberOfTiles());
 
     // Calculate and setup the nextMove for all zombies and bullets
     _zombieManager.CalculateNextMoveZombies(_player.GetRectangle());
@@ -88,16 +88,16 @@ void Game::_UpdateVerticalPositionEntities()
 void Game::_HandleCollisions(char mode)
 {
     // === Check for player-boundary collision ===
-    if(_collisionManager.IsOutsideBoundaryX(_player.GetRectangle(), _gridManager.GetGridDimensions().x)) 
+    if(_collisionManager.IsOutsideBoundaryX(_player.GetRectangle(), _grid.GetGridDimensions().x)) 
         _player.RevertHorizontalPosition();
-    if(_collisionManager.IsOutsideBoundaryY(_player.GetRectangle(), _gridManager.GetGridDimensions().y))
+    if(_collisionManager.IsOutsideBoundaryY(_player.GetRectangle(), _grid.GetGridDimensions().y))
         _player.RevertVerticalPosition();
 
     // === Check for bullet-boundary collision ===
     for(unsigned int i{0} ; i < _bulletManager.GetBulletsArray().size() ; ++i)
     {
-        bool isOutsideBoundaryX = _collisionManager.IsOutsideBoundaryX(_bulletManager.GetBulletsArray()[i].GetRectangle(), _gridManager.GetGridDimensions().x);
-        bool isOutsideBoundaryY = _collisionManager.IsOutsideBoundaryY(_bulletManager.GetBulletsArray()[i].GetRectangle(), _gridManager.GetGridDimensions().y);
+        bool isOutsideBoundaryX = _collisionManager.IsOutsideBoundaryX(_bulletManager.GetBulletsArray()[i].GetRectangle(), _grid.GetGridDimensions().x);
+        bool isOutsideBoundaryY = _collisionManager.IsOutsideBoundaryY(_bulletManager.GetBulletsArray()[i].GetRectangle(), _grid.GetGridDimensions().y);
         if(isOutsideBoundaryX || isOutsideBoundaryY) 
             _bulletManager.RemoveBullet(i);
     }
@@ -193,6 +193,7 @@ void Game::_HandleCollisions(char mode)
         Wall& wall = _wallManager.GetWallsArray()[i];
         if(CheckCollisionRecs(_player.GetRectangle(), wall.GetRectangle()))
         {
+            std::cout << "collision player wall" << std::endl;
             if(mode == 'x')
                 _player.RevertHorizontalPosition();
             else

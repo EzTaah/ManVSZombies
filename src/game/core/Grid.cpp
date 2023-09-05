@@ -1,7 +1,7 @@
-#include "grid_manager.hpp"
+#include "Grid.hpp"
 
 
-GridManager::GridManager() 
+Grid::Grid() 
     : _grid({{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -39,24 +39,24 @@ GridManager::GridManager()
 
 
 // === Accessors ===
-std::vector<std::vector<int>> GridManager::GetGrid() const {
+std::vector<std::vector<int>> Grid::GetGrid() const {
     return _grid;
 }
 
-Vector2 GridManager::GetGridDimensions() const {
+Vector2 Grid::GetGridDimensions() const {
     return _gridDimensions;
 }
 
-Vector2 GridManager::GetNumberOfTiles() const {
+Vector2 Grid::GetNumberOfTiles() const {
     return {_grid[0].size(), _grid.size()};
 }
 
-Vector2 GridManager::GetPositionInViewSpace() const {
+Vector2 Grid::GetPositionInViewSpace() const {
     return _positionInViewSpace;
 }
 
 
 // === Mutators ===
-void GridManager::SetPositionInViewSpace(const Vector2& newPositionInViewSpace) {
+void Grid::SetPositionInViewSpace(const Vector2& newPositionInViewSpace) {
     _positionInViewSpace = newPositionInViewSpace;
 }

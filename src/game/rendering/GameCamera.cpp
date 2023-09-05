@@ -1,4 +1,4 @@
-#include "game_camera.hpp"
+#include "GameCamera.hpp"
 
 
 GameCamera::GameCamera() 

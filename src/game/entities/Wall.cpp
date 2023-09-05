@@ -1,4 +1,4 @@
-#include "wall.hpp"
+#include "Wall.hpp"
 
 
 Wall::Wall(const Vector2& position)

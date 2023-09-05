@@ -3,10 +3,10 @@
 #include <vector>
 
 
-class GridManager
+class Grid
 {
 public:
-    GridManager();
+    Grid();
 
     // === Accessors ===
     std::vector<std::vector<int>> GetGrid() const;
