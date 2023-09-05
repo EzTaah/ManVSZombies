@@ -193,7 +193,6 @@ void Game::_HandleCollisions(char mode)
         Wall& wall = _wallManager.GetWallsArray()[i];
         if(CheckCollisionRecs(_player.GetRectangle(), wall.GetRectangle()))
         {
-            std::cout << "collision player wall" << std::endl;
             if(mode == 'x')
                 _player.RevertHorizontalPosition();
             else
