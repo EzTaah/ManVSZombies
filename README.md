@@ -31,15 +31,21 @@ Follow the instructions below if you wish to compile using this setup.
 
 1. Open a PowerShell terminal and navigate to the project's directory.
 
+<br>
+
 2. Create a build directory : 
 ```bash
 mkdir build
 ```
 
+<br>
+
 3. Navigate to the build directory : 
 ```bash
 cd build 
 ```
+
+<br>
 
 4. Generate the makefiles (Choose between the debug and the release version) :
 ```bash
@@ -49,15 +55,21 @@ cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
 cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..
 ```
 
+<br>
+
 5. Compile the project :
 ```bash
 mingw32-make 
 ```
 
+<br>
+
 6. Navigate to the datasrc directory : 
 ```bash
 cd ./../datasrc
 ```
+
+<br>
 
 7. Run the game (Choose between the debug and the release version) :   
 ```bash
