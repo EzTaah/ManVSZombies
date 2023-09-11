@@ -54,10 +54,15 @@ cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..
 mingw32-make 
 ```
 
-5. Run the game (Choose between the debug and the release version) :   
+6. Navigate to the datasrc directory : 
 ```bash
-.\debug.exe
+cd ./../datasrc
+```
+
+7. Run the game (Choose between the debug and the release version) :   
+```bash
+./../build/debug.exe
 ```
 ```bash
-.\release.exe
+./../build/release.exe
 ```
