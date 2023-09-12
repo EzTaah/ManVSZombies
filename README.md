@@ -1,6 +1,6 @@
 <div align="center">
 
-# ManVSZombies
+# 2Dshooter
 
 *Developed in August 2023*
 

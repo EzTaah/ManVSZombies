@@ -4,7 +4,7 @@
 
 int main()
 {
-    InitWindow(1366, 768, "ManVsZombie");
+    InitWindow(1366, 768, "2Dshooter");
     SetWindowState(FLAG_VSYNC_HINT);
     Game game = Game();
 
